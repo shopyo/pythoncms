@@ -34,8 +34,8 @@ setup(
     long_description=long_description,  # Optional
     long_description_content_type="text/markdown",  # Optional (see note above)
     url="",  # Optional
-    author="",  # Optional
-    author_email="",  # Optional
+    author="Abdur-Rahmaan Janhangeer",  # Optional
+    author_email="arj.python@gmail.com",  # Optional
     # Classifiers help users find your project by categorizing it.
     #
     # For a list of valid classifiers, see https://pypi.org/classifiers/
@@ -54,12 +54,13 @@ setup(
         # that you indicate whether you support Python 2, Python 3 or both.
         # These classifiers are *not* checked by 'pip install'. See instead
         # 'python_requires' below.
-        "Programming Language :: Python :: 3.6",
         "Programming Language :: Python :: 3.7",
         "Programming Language :: Python :: 3.8",
         "Programming Language :: Python :: 3.9",
+        "Programming Language :: Python :: 3.10",
+        "Programming Language :: Python :: 3.11",
     ],
-    keywords="",  # Optional
+    keywords="cms",  # Optional
     # You can just specify package directories manually here if your project is
     # simple. Or you can use find_packages().
     #
@@ -72,13 +73,13 @@ setup(
     # packages=find_packages(exclude=['contrib', 'docs', 'tests']),  # Required
     packages=["pythoncms"],
     include_package_data=True,
-    python_requires=">=3.6",
+    python_requires=">=3.7",
     install_requires=open(os.path.join(here, "requirements.txt"), encoding="utf-8")
     .read()
     .split("\n"),  # Optional
     project_urls={  # Optional
-        "Bug Reports": "",
-        "Source": "",
+        "Bug Reports": "https://github.com/shopyo/pythoncms/issues",
+        "Source": "https://github.com/shopyo/pythoncms",
     },
     entry_points={"console_scripts": ["pythoncms=pythoncms.cli:cli"]},
 )
