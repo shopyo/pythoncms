@@ -1,36 +1,25 @@
-default_language_version:
-  python: python3.7
-
-default_stages: [commit, push]
-
 repos:
-  - repo: https://github.com/pre-commit/pre-commit-hooks
-    rev: v2.5.0
-    hooks:
-      - id: check-yaml
-      - id: end-of-file-fixer
-        exclude: LICENSE
-
-  - repo: local
+  - repo: https://github.com/asottile/pyupgrade
+    rev: v3.3.1
     hooks:
       - id: pyupgrade
-        name: pyupgrade
-        entry: poetry run pyupgrade --py37-plus
-        types: [python]
-        language: system
-
-  - repo: local
+        args: ["--py36-plus"]
+  - repo: https://github.com/asottile/reorder_python_imports
+    rev: v3.9.0
     hooks:
-      - id: isort
-        name: isort
-        entry: poetry run isort --settings-path pyproject.toml
-        types: [python]
-        language: system
-
-  - repo: local
+      - id: reorder-python-imports
+        name: Reorder Python imports
+  - repo: https://github.com/psf/black
+    rev: 22.12.0
     hooks:
       - id: black
-        name: black
-        entry: poetry run black --config pyproject.toml
-        types: [python]
-        language: system
+        args: [--experimental-string-processing]
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v4.4.0
+    hooks:
+      - id: fix-byte-order-marker
+      - id: trailing-whitespace
+      - id: end-of-file-fixer
+      - id: check-yaml
+      - id: debug-statements
+      - id: check-added-large-files

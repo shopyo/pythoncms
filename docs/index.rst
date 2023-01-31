@@ -1,4 +1,4 @@
-Welcome to src docs!
+Welcome to pythoncms docs!
 ============================
 
 Write project description here
