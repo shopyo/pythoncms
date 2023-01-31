@@ -5,6 +5,7 @@ from flask import url_for
 from flask_login import login_required
 from init import db
 from modules.box__default.i18n.helpers import get_current_lang
+from modules.box__default.theme.helpers import get_active_front_theme
 from shopyo.api.forms import flash_errors
 from shopyo.api.module import ModuleHelp
 
@@ -61,7 +62,9 @@ def view_page(slug):
     context = {}
     page = Page.query.filter(Page.slug == slug).first()
     context.update({"page": page})
-    return render_template("page/view_page.html", **context)
+
+    return render_template(f"{get_active_front_theme()}/page.html", **context)
+    # return render_template("page/view_page.html", **context)
 
 
 @module_blueprint.route(mhelp.info["dashboard"])

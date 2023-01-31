@@ -1,4 +1,4 @@
-from .helper import *
+from .helpers import *
 
 available_everywhere = {
     "get_active_front_theme": get_active_front_theme,

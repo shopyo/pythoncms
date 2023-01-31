@@ -7,6 +7,6 @@
     "display_string": "I18n",
     "fa-icon": "fa fa-store",
     "module_name": "i18n",
-    "type": "show",
+    "type": "hide",
     "url_prefix": "/i18n"
 }
