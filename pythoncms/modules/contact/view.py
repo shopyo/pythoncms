@@ -5,6 +5,7 @@ from flask import render_template
 from flask import request
 from flask import url_for
 from flask_login import login_required
+from modules.box__default.theme.helpers import get_active_front_theme
 from shopyo.api.html import notify_success
 
 from .forms import ContactForm
@@ -24,7 +25,7 @@ def index():
     form = ContactForm()
 
     context.update({"form": form})
-    return render_template("contact/contact_form.html", **context)
+    return render_template(f"{get_active_front_theme()}/contact.html", **context)
 
 
 @contact_blueprint.route("/validate_message", methods=["GET", "POST"])
@@ -53,6 +54,8 @@ def dashboard(page):
     context = {}
 
     per_page = 10
-    messages = ContactMessage.query.paginate(page, per_page, error_out=False)
+    messages = ContactMessage.query.paginate(
+        page=page, per_page=per_page, error_out=False
+    )
     context.update({"messages": messages})
     return render_template("contact/dashboard.html", **context)
