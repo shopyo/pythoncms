@@ -32,6 +32,7 @@ flask --debug run
 
 dashboard
 
+login with `admin@domain.com` | `pass`
 ```
 http://127.0.0.1:5000/dashboard/
 ```
