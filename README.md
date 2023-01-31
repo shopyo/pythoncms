@@ -1,7 +1,7 @@
 # Welcome to pythoncms
 
 
-Local dev
+## Local dev
 
 Install package
 
@@ -22,6 +22,18 @@ for migrating
 ```
 flask db migrate
 flask db upgrade
+```
+
+run
+
+```
+flask --debug run
+```
+
+dashboard
+
+```
+http://127.0.0.1:5000/dashboard/
 ```
 
 ## Theme
