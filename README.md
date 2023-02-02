@@ -1,3 +1,17 @@
+<div align="center">
+
+
+
+<img src="https://github.com/Abdur-rahmaanJ/shopcube/raw/main/assets/logo.png" width="200" />
+
+[![First Timers Only](https://img.shields.io/badge/first--timers--only-friendly-blue.svg)](https://www.firsttimersonly.com/)
+
+🇲🇺
+
+</div>
+
+
+
 # Welcome to pythoncms
 
 
@@ -45,8 +59,12 @@ Each theme must have
 
 ```
 index.html
+base.html
 contact.html
 page.html
+login.html
+register.html
+unconfirmed.html
 ```
 
 - info.json
@@ -55,5 +73,33 @@ page.html
 {
 	"author": "ARJ",
 	"version": "1.0.20000000000003"
+}
+```
+
+## Info json
+
+```
+{
+	"display_string": "Admin",
+	"type": "show", // hidden if hide
+	"icons":{
+		"fa": "fas fa-user-lock", // set according to ACTIVE_ICONSET
+		"boxicons": "",           // set according to ACTIVE_ICONSET
+		"file": "icon.svg" // if present, will be used and searched for
+						   // in module/static. Make sure to shopyo collecstatic in production
+	},
+	"url_prefix": "/appadmin",
+	"menu": {
+		"list users":"/", // url-prefix will be concatenated with it for sub menus.
+		"add user": "/add",
+		"roles":"/roles"
+	},
+	"menu-type": "show-menu", // or no-menu. Expects menu key if show-menu.
+	"module_name": "appadmin",
+	"author": {
+		"name":"Abdur-Rahmaan Janhangeer",
+		"website":"https://www.pythonkitchen.com/about-me/",
+		"mail":"arj.python@gmail.com"
+		}
 }
 ```

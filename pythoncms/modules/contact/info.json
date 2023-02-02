@@ -1,7 +1,10 @@
 {
   "display_string": "Contact",
   "type": "show",
-  "fa-icon": "fa fa-envelope",
+  "icons":{
+		"fa": "fa fa-envelope",
+		"boxicons": "bx bx-envelope"
+	},
   "url_prefix": "/contact",
   "dashboard": "/dashboard",
   "author": {

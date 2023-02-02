@@ -2,8 +2,15 @@
         "display_string": "Page",
         "module_name":"page",
         "type": "show",
-        "fa-icon": "fa fa-edit",
+        "icons":{
+		"fa": "fa fa-edit",
+		"boxicons": "bx bx-pen"
+	},
         "url_prefix": "/page",
+        "menu": {
+                "new page": "/dashboard",
+                "all pages":"/dashboard/all-pages"
+        },
         "dashboard": "/dashboard",
         "author": {
                 "name": "Abdur-Rahmaan Janhangeer",

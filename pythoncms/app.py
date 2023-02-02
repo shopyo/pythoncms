@@ -18,6 +18,7 @@ from flask import Flask
 from flask_admin import Admin
 from flask_admin.menu import MenuLink
 from flask_login import current_user
+from shopyo.api.assets import get_static
 from shopyo.api.assets import register_devstatic
 from shopyo.api.debug import is_yo_debug
 from shopyo.api.file import trycopy
@@ -260,6 +261,7 @@ def inject_global_vars(app, global_template_variables):
             "APP_NAME": APP_NAME,
             "len": len,
             "current_user": current_user,
+            "get_static": get_static,
         }
         base_context.update(global_template_variables)
 

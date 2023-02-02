@@ -6,7 +6,8 @@
     "settings": {
       "APP_NAME": "Demo",
       "ACTIVE_FRONT_THEME": "editorial",
-      "ACTIVE_BACK_THEME": "boogle",
-      "CURRENCY": "MUR"
+      "ACTIVE_BACK_THEME": "sneat",
+      "CURRENCY": "MUR",
+      "ACTIVE_ICONSET": "boxicons"
     }
 }

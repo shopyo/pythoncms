@@ -24,13 +24,13 @@ sidebar = [{"text": "sample", "icon": "fa fa-table", "url": ""}]
 module_settings = {"sidebar": sidebar}
 
 
-@module_blueprint.route(mhelp.info["dashboard"] + "/all")
-def index_all():
-    context = {}
-    pages = Page.query.all()
+# @module_blueprint.route(mhelp.info["dashboard"] + "/all")
+# def index_all():
+#     context = {}
+#     pages = Page.query.all()
 
-    context.update({"pages": pages})
-    return render_template("page/all_pages.html", **context)
+#     context.update({"pages": pages})
+#     return render_template("page/all_pages.html", **context)
 
 
 @module_blueprint.route(mhelp.info["dashboard"] + "/all-pages")

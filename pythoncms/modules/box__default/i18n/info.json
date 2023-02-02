@@ -5,7 +5,10 @@
         "website": ""
     },
     "display_string": "I18n",
-    "fa-icon": "fa fa-store",
+    "icons":{
+		"fa": "fas fa-user-lock",
+		"boxicons": ""
+	},
     "module_name": "i18n",
     "type": "hide",
     "url_prefix": "/i18n"
