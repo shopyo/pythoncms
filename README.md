@@ -2,7 +2,9 @@
 
 
 
-<img src="https://github.com/Abdur-rahmaanJ/shopcube/raw/main/assets/logo.png" width="200" />
+<img src="https://github.com/shopyo/pythoncms/raw/main/assets/logo.png" width="200"/>
+
+<br><br>
 
 [![First Timers Only](https://img.shields.io/badge/first--timers--only-friendly-blue.svg)](https://www.firsttimersonly.com/)
 
