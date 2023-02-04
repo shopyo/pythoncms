@@ -1,33 +1,26 @@
-{% extends "base/module_base.html" %}
+{% extends get_active_back_theme()+"/base.html" %}
 
-{% set active_page ='page' %}
-
-{% block pagehead %}
-<title>{{active_page.capitalize()}}</title>
-<style>
-  .hidden{
-    display: none;
-  }
-  .show{
-    display: inline-block;
-  }
-</style>
-
-{% endblock %}
-{% block sidebar %}
-{%include 'page/blocks/sidebar.html'%}
-{%endblock%}
 {% block content %}
 <br>
-<div class="list-group">
-   <div class="list-group-item">
-  {%for page in pages%}
-      {% if page.get_dashboard_url() %}
-      <a href="{{ page.get_dashboard_url() }}">
-          {{page.title}}
-      </a><br>
-      {% endif %}
-  {%endfor%}
-  </div>
+<div class="container">
+
+    <div class="card">
+        <h2 class="card-header">All pages</h2>
+        <div class="list-group">
+
+
+           {%for page in pages%}
+           <div class="list-group-item">
+               {% if page.get_dashboard_url() %}
+               <a href="{{ page.get_dashboard_url() }}">
+                   {{page.title}}
+               </a><br>
+               {% endif %}
+            </div>
+           {%endfor%}
+
+         </div>
+    </div>
+
 </div>
 {% endblock %}

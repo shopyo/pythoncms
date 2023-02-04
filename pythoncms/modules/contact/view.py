@@ -43,7 +43,7 @@ def validate_message():
 
         contact_message = ContactMessage(name=name, email=email, message=message)
         contact_message.insert()
-        flash(notify_success("Message submitted!"))
+        flash("Message submitted!", "ok")
         return redirect(url_for("contact.index"))
 
 

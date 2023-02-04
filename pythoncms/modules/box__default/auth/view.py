@@ -10,6 +10,7 @@ from flask_login import current_user
 from flask_login import login_required
 from flask_login import login_user
 from flask_login import logout_user
+from modules.box__default.theme.helpers import get_active_back_theme
 from shopyo.api.email import send_async_email
 from shopyo.api.html import notify_danger
 from shopyo.api.html import notify_success
@@ -55,12 +56,12 @@ def register():
             subject = "Please confirm your email"
             context.update({"token": token, "user": user})
             send_async_email(email, subject, template, **context)
-            flash(notify_success("A confirmation email has been sent via email."))
+            flash("A confirmation email has been sent via email.", "ok")
 
         return redirect(url_for("dashboard.index"))
 
     context["form"] = reg_form
-    return render_template("auth/register.html", **context)
+    return render_template(f"{get_active_back_theme()}/register.html", **context)
 
 
 @module_blueprint.route("/confirm/<token>")
@@ -68,14 +69,14 @@ def register():
 def confirm(token):
 
     if current_user.is_email_confirmed:
-        flash(notify_warning("Account already confirmed."))
+        flash("Account already confirmed.", "warning")
         return redirect(url_for("dashboard.index"))
 
     if current_user.confirm_token(token):
-        flash(notify_success("You have confirmed your account. Thanks!"))
+        flash("You have confirmed your account. Thanks!", "ok")
         return redirect(url_for("dashboard.index"))
 
-    flash(notify_warning("The confirmation link is invalid/expired."))
+    flash("The confirmation link is invalid/expired.", "warning")
     return redirect(url_for("auth.unconfirmed"))
 
 
@@ -91,7 +92,7 @@ def resend():
     subject = "Please confirm your email"
     context = {"token": token, "user": current_user}
     send_async_email(current_user.email, subject, template, **context)
-    flash(notify_success("A new confirmation email has been sent."))
+    flash("A new confirmation email has been sent.", "ok")
     return redirect(url_for("auth.unconfirmed"))
 
 
@@ -100,8 +101,8 @@ def resend():
 def unconfirmed():
     if current_user.is_email_confirmed:
         return redirect(url_for("dashboard.index"))
-    flash(notify_warning("Please confirm your account!"))
-    return render_template("auth/unconfirmed.html")
+    flash("Please confirm your account!", "ok")
+    return render_template(f"{get_active_back_theme()}/unconfirmed.html")
 
 
 @module_blueprint.route("/login", methods=["GET", "POST"])
@@ -114,7 +115,7 @@ def login():
         password = login_form.password.data
         user = User.query.filter(func.lower(User.email) == func.lower(email)).first()
         if user is None or not user.check_password(password):
-            flash(notify_danger("please check your user id and password"))
+            flash("please check your user id and password", "error")
             return redirect(url_for("auth.login"))
         login_user(user)
         if "next" not in request.form:
@@ -126,14 +127,14 @@ def login():
             else:
                 next_url = get_safe_redirect(request.form["next"])
         return redirect(next_url)
-    return render_template("auth/login.html", **context)
+    return render_template(f"{get_active_back_theme()}/login.html", **context)
 
 
 @module_blueprint.route("/logout", methods=["GET"])
 @login_required
 def logout():
     logout_user()
-    flash(notify_success("Successfully logged out"))
+    flash("Successfully logged out", "ok")
 
     if "next" not in request.args:
         next_url = url_for("dashboard.index")

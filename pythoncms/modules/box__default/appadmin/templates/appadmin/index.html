@@ -1,18 +1,7 @@
-{% extends "base/module_base.html" %}
-{% set active_page ='admin' %}
-{% block pagehead %}
-<title>{{active_page.capitalize()}}</title>
-<style>
-    .hidden{
-    display: none;
-  }
-  .show{
-    display: inline-block;
-  }
-</style>
-{% endblock %}
-{% block sidebar %}
-{%include 'appadmin/blocks/sidebar.html'%}
+{% extends get_active_back_theme()+"/base.html" %}
+
+{%block head%}
+    <script src="{{url_for('static', filename='jquery_3.2.1.min.js')}}"></script>
 {%endblock%}
 {% block content %}
 <br>
@@ -33,7 +22,7 @@ $(function() {
 <div class="container">
     <div class="card">
         <div class="card-body">
-            <h2>{{active_page.capitalize()}}</h2>
+            <h2>List users</h2>
             <table class="table table-responsive table-bordered">
                 <thead>
                     <tr>
@@ -62,11 +51,11 @@ $(function() {
                         <td style="border: none;">
                             <div style='display: inline-block; '>
                                 <a style="text-decoration: none;">
-                                    <button id='delete' data-id="{{ user.id }}" class="delete_me btn btn-dark" type="" name="{{ user.id }}"><i class="fas fa-trash-alt"></i></button>
+                                    <button id='delete' data-id="{{ user.id }}" class="delete_me btn btn-dark" type="" name="{{ user.id }}">delete</button>
                                 </a>
                                 &nbsp;
                                 <a href="/appadmin/edit/{{ user.id }}" style="text-decoration: none;">
-                                    <button data-name="{{ user.id }}" class="btn btn-warning"><i id="ico-{{user.id}}" class="fas fa-pencil-alt"></i>
+                                    <button data-name="{{ user.id }}" class="btn btn-warning">edit
                                     </button>
                                 </a>
                             </div>

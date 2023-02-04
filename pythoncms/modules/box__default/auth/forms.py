@@ -29,7 +29,7 @@ class RegistrationForm(FlaskForm):
     """Registration Form"""
 
     email = EmailField(
-        "email_label",
+        "Email",
         [DataRequired(), Email(message="Not a valid email address.")],
     )
 

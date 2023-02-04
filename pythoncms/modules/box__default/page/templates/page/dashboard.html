@@ -1,18 +1,7 @@
-{% extends "base/module_base.html" %}
-{% set active_page ='page' %}
-{% block pagehead %}
-<title>{{active_page.capitalize()}}</title>
-<style>
-    .hidden{
-    display: none;
-  }
-  .show{
-    display: inline-block;
-  }
-</style>
-{% endblock %}
-{% block sidebar %}
-{%include 'page/blocks/sidebar.html'%}
+{%extends get_active_back_theme()+'/base.html'%}
+
+{%block head%}
+    <script src="{{url_for('static', filename='jquery_3.2.1.min.js')}}"></script>
 {%endblock%}
 {% block content %}
 <br>
@@ -23,17 +12,11 @@
             <form action="{{url_for('{}.check_pagecontent'.format(module_name))}}" method="POST">
                 {{ form.title.label }}
                 <div class="input-group mb-3">
-                    <div class="input-group-prepend">
-                        <span class="input-group-text"><i class="fa fa-calendar-day"></i></span>
-                    </div>
                     {{ form.title }}
                     <span id="error" type="text" vissiblity='hidden'></span>
                 </div>
                 {{ form.slug.label }}
                 <div class="input-group mb-3">
-                    <div class="input-group-prepend">
-                        <span class="input-group-text"><i class="fa fa-calendar-day"></i></span>
-                    </div>
                     {{ form.slug }}
                     <span id="error" type="text" vissiblity='hidden'></span>
                 </div>

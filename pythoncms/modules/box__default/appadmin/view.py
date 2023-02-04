@@ -81,7 +81,7 @@ def user_add():
             new_user.save()
             return redirect(url_for("appadmin.user_add"))
 
-        flash(notify_warning("User with same email already exists"))
+        flash("User with same email already exists", "warning")
 
     context["roles"] = Role.query.all()
     return render_template("appadmin/add.html", **context)
@@ -101,11 +101,11 @@ def admin_delete(id):
     user = User.query.get(id)
 
     if user is None:
-        flash(notify_warning("Unable to delete. Invalid user id"))
+        flash("Unable to delete. Invalid user id", "error")
         return redirect("/appadmin")
 
     user.delete()
-    flash(notify_success("User successfully deleted"))
+    flash("User successfully deleted", "ok")
     return redirect("/appadmin")
 
 
@@ -124,7 +124,7 @@ def admin_edit(id):
     user = User.query.get(id)
 
     if user is None:
-        flash(notify_warning("Unable to edit. Invalid user id"))
+        flash("Unable to edit. Invalid user id", "error")
         return redirect("/appadmin")
 
     context["user"] = user
@@ -156,7 +156,7 @@ def admin_update():
     user = User.query.get(id)
 
     if user is None:
-        flash(notify_warning("Unable to update. User does not exist."))
+        flash("Unable to update. User does not exist.", "error")
         return redirect("/admin")
 
     user.is_admin = is_admin
@@ -175,7 +175,7 @@ def admin_update():
             user.roles.append(role)
 
     user.update()
-    flash(notify_success("User successfully updated"))
+    flash("User successfully updated", "ok")
     return redirect("/appadmin")
 
 
@@ -196,9 +196,9 @@ def roles_add():
         if not Role.query.filter(Role.name == request.form["name"]).first():
             role = Role(name=request.form["name"])
             role.save()
-            flash(notify_success("Role successfully added"))
+            flash("Role successfully added", "ok")
             return redirect(url_for("appadmin.roles"))
-        flash(notify_warning("Role already exists"))
+        flash("Role already exists", "warning")
         return redirect(url_for("appadmin.roles"))
 
 
@@ -209,11 +209,11 @@ def roles_delete(role_id):
     role = Role.get_by_id(role_id)
 
     if role is None:
-        flash(notify_warning("Unable to delete. Invalid role id"))
+        flash("Unable to delete. Invalid role id", "warning")
         return redirect(url_for("appadmin.roles"))
 
     role.delete()
-    flash(notify_success("Role successfully deleted"))
+    flash("Role successfully deleted", "ok")
     return redirect(url_for("appadmin.roles"))
 
 
@@ -225,11 +225,11 @@ def roles_update():
         role = Role.get_by_id(request.form["role_id"])
 
         if role is None:
-            flash(notify_warning("Unable to update. Role does not exist"))
+            flash("Unable to update. Role does not exist", "warning")
             return redirect(url_for("appadmin.roles"))
 
         role.name = request.form["role_name"]
         role.update()
-        flash(notify_success("Role successfully updated"))
+        flash("Role successfully updated", "ok")
 
     return redirect(url_for("appadmin.roles"))
