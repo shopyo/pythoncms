@@ -21,6 +21,7 @@
 
 Install package
 
+! Important: Please create and activate a virtual environment.
 
 ```
 python -m pip install -e .
