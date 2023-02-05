@@ -18,10 +18,12 @@
 
 ## Try
 
+![](https://github.com/shopyo/pythoncms/raw/main/assets/term.gif)
+
 In virtual env
 
 ```
-pip install pythoncms==1.2.0
+pip install pythoncms==1.2.1
 pythoncms start mysite
 cd mysite
 shopyo initialise

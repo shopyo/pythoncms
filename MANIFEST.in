@@ -1,9 +1,9 @@
 include requirements.txt
 include dev_requirements.txt
 exclude config.json
-recursive-include {projname} *
-recursive-exclude {projname}/instance *
-recursive-exclude {projname}/migrations *
-recursive-exclude {projname}/static/modules *
-recursive-exclude {projname}/.tox *
+recursive-include pythoncms *
+recursive-exclude pythoncms/instance *
+recursive-exclude pythoncms/migrations *
+recursive-exclude pythoncms/static/modules *
+recursive-exclude pythoncms/.tox *
 recursive-exclude __pycache__ *

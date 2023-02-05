@@ -60,9 +60,6 @@ def start(name):
     dest = os.getcwd() + f"/{name}"
 
     trycopytree(str(path.parent.absolute()), dest)
-    tryrmtree(dest + "/__pycache__")
-    tryrmtree(dest + "/migrations")
-    tryrmtree(dest + "/instance")
-    tryrmfile(dest + "/config.json")
+    tryrmfile(dest + "/cli.py")
     trymkfile(dest + "/requirements.txt", reqs)
     click.echo(f"🍭  Pythoncms project {name} is ready to go!")
