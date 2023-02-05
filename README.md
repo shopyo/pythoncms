@@ -16,6 +16,17 @@
 
 # Welcome to pythoncms
 
+## Try
+
+In virtual env
+
+```
+pip install pythoncms==1.2.0
+pythoncms start mysite
+cd mysite
+shopyo initialise
+flask --debug run
+```
 
 ## Local dev
 
@@ -106,3 +117,9 @@ unconfirmed.html
 		}
 }
 ```
+## Changelog
+
+1.2.0
+
+- Tiny MCE configured
+- start command
