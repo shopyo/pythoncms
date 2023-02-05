@@ -23,7 +23,7 @@
 In virtual env
 
 ```
-pip install pythoncms==1.2.1
+pip install pythoncms
 pythoncms start mysite
 cd mysite
 shopyo initialise
