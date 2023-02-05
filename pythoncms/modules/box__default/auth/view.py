@@ -134,13 +134,12 @@ def login():
 @login_required
 def logout():
     logout_user()
-    flash("Successfully logged out", "ok")
 
     if "next" not in request.args:
-        next_url = url_for("dashboard.index")
+        next_url = url_for("www.index")
     else:
         if request.args.get("next") == "":
-            next_url = url_for("dashboard.index")
+            next_url = url_for("www.index")
         else:
             next_url = get_safe_redirect(request.args.get("next"))
     return redirect(next_url)

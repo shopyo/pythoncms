@@ -2,6 +2,7 @@
 
 {%block head%}
     <script src="{{url_for('static', filename='jquery_3.2.1.min.js')}}"></script>
+
 {%endblock%}
 {% block content %}
 <br>
@@ -40,17 +41,19 @@
         </div>
     </div>
 </div>
-<script type="text/javascript" src="{{ url_for('static', filename='tinymce/tinymce.min.js') }}"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/tinymce/6.3.1/tinymce.min.js" integrity="sha512-eV68QXP3t5Jbsf18jfqT8xclEJSGvSK5uClUuqayUbF5IRK8e2/VSXIFHzEoBnNcvLBkHngnnd3CY7AFpUhF7w==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 <script type="text/javascript">
 tinymce.init({
     selector: '#content',
-    plugins: [
-        'advlist autolink link image imagetools lists charmap print preview hr anchor pagebreak spellchecker',
-        'searchreplace wordcount visualblocks visualchars code fullscreen insertdatetime media nonbreaking',
-        'save table contextmenu directionality template paste textcolor codesample'
-    ],
+    plugins: `advlist autolink link image imagetools lists
+                charmap print preview hr anchor pagebreak
+        searchreplace wordcount visualblocks visualchars code
+        fullscreen insertdatetime media nonbreaking
+        save table directionality template paste
+        codesample`
+    ,
     imagetools_toolbar: "rotateleft rotateright | flipv fliph | editimage imageoptions",
-    toolbar: 'insertfile undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image | print preview media fullpage | forecolor backcolor emoticons | codesample',
+    toolbar: 'insertfile undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image | print preview media fullpage | forecolor backcolor emoticons | codesample | table tabledelete | tableprops tablerowprops tablecellprops | tableinsertrowbefore tableinsertrowafter tabledeleterow | tableinsertcolbefore tableinsertcolafter tabledeletecol',
     relative_urls: false,
     images_upload_url: "",
     image_title: true,
@@ -65,6 +68,7 @@ tinymce.init({
         { text: 'Python', value: 'python' }
     ],
     width: "100%",
+    promotion: false
 });
 </script>
 <script type="text/javascript">

@@ -3,6 +3,7 @@ include dev_requirements.txt
 exclude config.json
 recursive-include {projname} *
 recursive-exclude {projname}/instance *
+recursive-exclude {projname}/migrations *
 recursive-exclude {projname}/static/modules *
 recursive-exclude {projname}/.tox *
 recursive-exclude __pycache__ *
