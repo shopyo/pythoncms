@@ -71,13 +71,18 @@ http://127.0.0.1:5000/dashboard/
 
 Themes are located at '/static/themes/'
 
-Each theme must have
+Each front theme must have
 
 ```
 index.html
-base.html
 contact.html
 page.html
+```
+
+Each back theme must have
+
+```
+base.html
 login.html
 register.html
 unconfirmed.html
