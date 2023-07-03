@@ -57,7 +57,7 @@ def view_page_dashboard(slug):
     return render_template("page/view_page_dashboard.html", **context)
 
 
-@module_blueprint.route("/s/<slug>", methods=["GET"])
+@module_blueprint.route("/<slug>", methods=["GET"])
 def view_page(slug):
     context = {}
     page = Page.query.filter(Page.slug == slug).first()
