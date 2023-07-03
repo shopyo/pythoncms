@@ -1,0 +1,31 @@
+{%extends get_active_back_theme()+'/base.html'%}
+
+{%block head%}
+    <script src="{{url_for('static', filename='jquery_3.2.1.min.js')}}"></script>
+
+{%endblock%}
+{% block content %}
+<br>
+<div class="container">
+    <div class="card">
+        <div class="card-body">
+           <form method="post">
+            Site title<br>
+            <input name="site_title" value="{{get_setting('SITE_TITLE')}}">
+            <br>
+            Site description<br>
+            <textarea 
+                id="" 
+                cols="30" 
+                rows="10" 
+                name="site_description" 
+                >{{get_setting('SITE_DESCRIPTION')}}</textarea>
+            <br>
+            <input type="hidden" name="csrf_token" value="{{csrf_token()}}">
+            <button type="submit">Submit</button>
+            
+           </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

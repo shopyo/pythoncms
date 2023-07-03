@@ -26,9 +26,8 @@
 							<section id="banner">
 								<div class="content">
 									<header>
-										<h1>Hi, I’m Editorial<br />
-										by HTML5 UP</h1>
-										<p>A free and fully responsive site template</p>
+										<h1>{{get_setting('SITE_TITLE')}}</h1>
+										<p>{{get_setting('SITE_DESCRIPTION')}}</p>
 									</header>
 									<p>Aenean ornare velit lacus, ac varius enim ullamcorper eu. Proin aliquam facilisis ante interdum congue. Integer mollis, nisl amet convallis, porttitor magna ullamcorper, amet egestas mauris. Ut magna finibus nisi nec lacinia. Nam maximus erat id euismod egestas. Pellentesque sapien ac quam. Lorem ipsum dolor sit nullam.</p>
 									<ul class="actions">
@@ -41,7 +40,7 @@
 							</section>
 
 						<!-- Section -->
-							<section>
+							<!-- <section>
 								<header class="major">
 									<h2>Erat lacinia</h2>
 								</header>
@@ -75,7 +74,7 @@
 										</div>
 									</article>
 								</div>
-							</section>
+							</section> -->
 
 						<!-- Section -->
 							<section>
@@ -87,7 +86,7 @@
 									<article>
 										<a href="#" class="image"><img src="{{url_for('static', filename='themes/front/editorial/images/pic01.jpg')}}" alt="" /></a>
 										<h3>{{page.title}}</h3>
-										<p>Aenean ornare velit lacus, ac varius enim lorem ullamcorper dolore. Proin aliquam facilisis ante interdum. Sed nulla amet lorem feugiat tempus aliquam.</p>
+										
 										<ul class="actions">
 											<li><a href="{{page.get_url()}}" class="button">More</a></li>
 										</ul>
