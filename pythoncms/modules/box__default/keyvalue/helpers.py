@@ -31,4 +31,4 @@ def get_value(key):
     if s:
         return s.value
     else:
-        return ''
+        raise Exception('Value not set for key', key)
