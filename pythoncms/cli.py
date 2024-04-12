@@ -62,4 +62,8 @@ def start(name):
     trycopytree(str(path.parent.absolute()), dest)
     tryrmfile(dest + "/cli.py")
     trymkfile(dest + "/requirements.txt", reqs)
+    try:
+        os.rename('.env_demo', '.env')
+    except Exception as e:
+        print(e)
     click.echo(f"🍭  Pythoncms project {name} is ready to go!")
