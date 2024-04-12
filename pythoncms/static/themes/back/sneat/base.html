@@ -127,8 +127,8 @@
                     {%if 'file' in moduleinfo['icons']%}
                     <img class="menu-icon" src="{{get_static(moduleinfo['static_name'], moduleinfo['icons']['file'])}}">
                     {%else%}
-                      {%if get_setting('ACTIVE_ICONSET') == 'fa'%}
-                      <i class="menu-icon {{moduleinfo['icons']['fa']}}"></i>
+                      {%if get_value('ACTIVE_ICONSET') == 'fa'%}
+                      <i class="{{moduleinfo['icons']['fa']}}"></i>
                       {%else%}
                       <i class="menu-icon tf-icons {{moduleinfo['icons']['boxicons']}}"></i>
                       {%endif%}
@@ -142,7 +142,7 @@
                     {%if 'file' in moduleinfo['icons']%}
                       <img class="menu-icon" src="{{get_static(moduleinfo['static_name'], moduleinfo['icons']['file'])}}">
                     {%else%}
-                      {%if get_setting('ACTIVE_ICONSET') == 'fa'%}
+                      {%if get_value('ACTIVE_ICONSET') == 'fa'%}
                       <i class="menu-icon {{moduleinfo['icons']['fa']}}"></i>
                       {%else%}
                       <i class="menu-icon tf-icons {{moduleinfo['icons']['boxicons']}}"></i>
