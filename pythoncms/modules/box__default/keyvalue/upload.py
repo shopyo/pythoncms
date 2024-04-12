@@ -1,7 +1,7 @@
 import json
 
 from init import db
-from modules.box__default.settings.models import Settings
+from modules.box__default.keyvalue.models import Settings
 
 
 def add_setting(name, value):

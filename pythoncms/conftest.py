@@ -13,7 +13,7 @@ from flask import url_for
 from flask_login import current_user as _current_user
 from init import db as _db
 from modules.box__default.auth.models import User
-from modules.box__default.settings.models import Settings
+from modules.box__default.keyvalue.models import Settings
 from sqlalchemy import event
 
 # run in shopyo/shopyo

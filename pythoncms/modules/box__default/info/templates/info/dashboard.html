@@ -13,7 +13,7 @@
             Site title<br>
             <input 
             class="form-control"
-            name="site_title" value="{{get_setting('SITE_TITLE')}}">
+            name="site_title" value="{{get_value('SITE_TITLE')}}">
             <br>
             Site description<br>
             <textarea 
@@ -23,7 +23,7 @@
                 name="site_description" 
                 class="form-control"
 
-                >{{get_setting('SITE_DESCRIPTION')}}</textarea>
+                >{{get_value('SITE_DESCRIPTION')}}</textarea>
             <br>
             <input type="hidden" name="csrf_token" value="{{csrf_token()}}" 
             >

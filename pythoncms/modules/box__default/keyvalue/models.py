@@ -1,11 +1,11 @@
 from init import db
 
 
-class Settings(db.Model):
-    __tablename__ = "settings"
+class KeyValue(db.Model):
+    __tablename__ = "keyvalue"
     id = db.Column(db.Integer, primary_key=True)
 
-    setting = db.Column(db.String(100), unique=True)
+    key = db.Column(db.String(100), unique=True)
     value = db.Column(db.String(100))
 
     def add(self):

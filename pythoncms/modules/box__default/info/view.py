@@ -20,14 +20,14 @@ module_blueprint = globals()[mhelp.blueprint_str]
 #     context.update({"pages": pages})
 #     return render_template("page/all_pages.html", **context)
 
-from modules.box__default.settings.helpers import set_setting
-from modules.box__default.settings.helpers import get_setting
+from modules.box__default.keyvalue.helpers import set_value
+from modules.box__default.keyvalue.helpers import get_value
 
 @module_blueprint.route(mhelp.info["dashboard"], methods=['POST', 'GET'])
 @login_required
 def index():
     if request.method == 'POST':
         print(request.form)
-        set_setting('SITE_TITLE', request.form['site_title'])
-        set_setting('SITE_DESCRIPTION', request.form['site_description'])
-    return mhelp.render('dashboard.html', get_setting=get_setting)
+        set_value('SITE_TITLE', request.form['site_title'])
+        set_value('SITE_DESCRIPTION', request.form['site_description'])
+    return mhelp.render('dashboard.html', get_value=get_value)
