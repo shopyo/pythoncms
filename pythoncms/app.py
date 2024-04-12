@@ -36,7 +36,7 @@ from init import installed_packages
 
 from shopyo_admin import MyAdminIndexView
 from shopyo_admin import DefaultModelView
-from modules.box__default.settings.models import Settings
+from modules.box__default.keyvalue.models import KeyValue
 from init import db
 
 
@@ -141,7 +141,7 @@ def setup_flask_admin(app):
         template_mode="bootstrap4",
         index_view=MyAdminIndexView(),
     )
-    admin.add_view(DefaultModelView(Settings, db.session))
+    admin.add_view(DefaultModelView(KeyValue, db.session))
     admin.add_link(MenuLink(name="Logout", category="", url="/auth/logout?next=/admin"))
 
 
