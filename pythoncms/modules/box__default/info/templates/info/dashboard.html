@@ -11,7 +11,9 @@
         <div class="card-body">
            <form method="post">
             Site title<br>
-            <input name="site_title" value="{{get_setting('SITE_TITLE')}}">
+            <input 
+            class="form-control"
+            name="site_title" value="{{get_setting('SITE_TITLE')}}">
             <br>
             Site description<br>
             <textarea 
@@ -19,10 +21,16 @@
                 cols="30" 
                 rows="10" 
                 name="site_description" 
+                class="form-control"
+
                 >{{get_setting('SITE_DESCRIPTION')}}</textarea>
             <br>
-            <input type="hidden" name="csrf_token" value="{{csrf_token()}}">
-            <button type="submit">Submit</button>
+            <input type="hidden" name="csrf_token" value="{{csrf_token()}}" 
+            >
+            <button 
+                type="submit"
+                class="btn btn-primary"
+            >Submit</button>
             
            </form>
         </div>
