@@ -23,6 +23,8 @@ from shopyo.api.assets import register_devstatic
 from shopyo.api.debug import is_yo_debug
 from shopyo.api.file import trycopy
 
+import sqlalchemy
+
 
 base_path = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, base_path)
@@ -37,6 +39,7 @@ from init import installed_packages
 from shopyo_admin import MyAdminIndexView
 from shopyo_admin import DefaultModelView
 from modules.box__default.keyvalue.models import KeyValue
+from modules.box__default.keyvalue.helpers import set_value
 from init import db
 
 
@@ -64,6 +67,7 @@ def create_app(config_name="development"):
     load_blueprints(app, config_name, global_template_variables, global_configs)
     setup_theme_paths(app)
     inject_global_vars(app, global_template_variables)
+    sync_keyvalue_envvar(app)
     return app
 
 
@@ -276,3 +280,22 @@ def inject_global_vars(app, global_template_variables):
         base_context.update(global_template_variables)
 
         return base_context
+    
+
+def sync_keyvalue_envvar(app):
+    with app.app_context():
+        try:
+            set_value(
+                'ACTIVE_FRONT_THEME',os.environ.get('ACTIVE_FRONT_THEME', 'editorial')
+            )
+            set_value(
+                'ACTIVE_BACK_THEME',os.environ.get('ACTIVE_BACK_THEME', 'sneat')
+            )
+            set_value(
+                'SITE_INFO',os.environ.get('SITE_INFO', 'Site Info')
+            )
+            set_value(
+                'SITE_DESCRIPTION',os.environ.get('SITE_DESCRIPTION', 'Site Description')
+            )
+        except sqlalchemy.exc.OperationalError: # on shopyo initialise command
+            pass
