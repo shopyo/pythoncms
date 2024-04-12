@@ -1,3 +1,4 @@
+
 <div align="center">
 
 
@@ -37,6 +38,8 @@ ACTIVE_FRONT_THEME = 'editorial'
 ACTIVE_BACK_THEME = 'sneat'
 APP_NAME = 'Demo'
 ACTIVE_ICONSET = 'boxicons'
+SITE_TITLE = 'Site title'
+SITE_DESCRIPTION = 'Site title'
 ```
 
 ## Local dev

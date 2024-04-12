@@ -57,6 +57,8 @@ def create_app(config_name="development"):
         instance_relative_config=True,
     )
 
+    
+
     load_plugins(app, global_template_variables, global_configs, config_name)
     load_config_from_obj(app, config_name)
     load_config_from_instance(app, config_name)
@@ -292,10 +294,17 @@ def sync_keyvalue_envvar(app):
                 'ACTIVE_BACK_THEME',os.environ.get('ACTIVE_BACK_THEME', 'sneat')
             )
             set_value(
-                'SITE_INFO',os.environ.get('SITE_INFO', 'Site Info')
+                'SITE_TITLE',os.environ.get('SITE_TITLE', 'Site Info')
             )
             set_value(
                 'SITE_DESCRIPTION',os.environ.get('SITE_DESCRIPTION', 'Site Description')
             )
-        except sqlalchemy.exc.OperationalError: # on shopyo initialise command
-            pass
+            set_value(
+                'APP_NAME',os.environ.get('APP_NAME', 'Default App Name')
+            )
+            set_value(
+                'ACTIVE_ICONSET',os.environ.get('ACTIVE_ICONSET', 'boxicons')
+            )
+        except sqlalchemy.exc.OperationalError as e: # on shopyo initialise command
+            if os.environ.get('FLASK_DEBUG', False):
+                print(e)
