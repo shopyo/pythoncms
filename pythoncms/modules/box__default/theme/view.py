@@ -15,6 +15,7 @@ from shopyo.api.file import get_folders
 # from init import db
 
 from modules.box__default.keyvalue.helpers import get_value
+from modules.box__default.keyvalue.helpers import set_value
 
 # from shopyo.api.forms import flash_errors
 
@@ -86,7 +87,7 @@ def index():
 @module_blueprint.route("/activate/front/<theme_name>")
 @login_required
 def activate_front_theme(theme_name):
-    os.environ['ACTIVE_FRONT_THEME"'] = theme_name
+    set_value('ACTIVE_FRONT_THEME', theme_name)
 
     # with app.app_context():
 
@@ -98,7 +99,7 @@ def activate_front_theme(theme_name):
 @module_blueprint.route("/activate/back/<theme_name>")
 @login_required
 def activate_back_theme(theme_name):
-    os.environ['ACTIVE_BACK_THEME"'] = theme_name
+    set_value('ACTIVE_BACK_THEME', theme_name)
 
     # with app.app_context():
 
