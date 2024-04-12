@@ -30,6 +30,15 @@ shopyo initialise
 flask --debug run
 ```
 
+If .env file not created, create .env file with content
+
+```.env
+ACTIVE_FRONT_THEME = 'editorial'
+ACTIVE_BACK_THEME = 'sneat'
+APP_NAME = 'Demo'
+ACTIVE_ICONSET = 'boxicons'
+```
+
 ## Local dev
 
 Install package
