@@ -14,7 +14,7 @@ from shopyo.api.file import get_folders
 # from shopyo.api.html import notify_success
 # from init import db
 
-# from modules.box__default.settings.models import Settings
+from modules.box__default.keyvalue.helpers import get_value
 
 # from shopyo.api.forms import flash_errors
 
@@ -65,8 +65,8 @@ def index():
         with open(info_path) as f:
             all_back_info[folder] = json.load(f)
 
-    active_front_theme = os.environ.get('ACTIVE_FRONT_THEME', 'editorial')
-    active_back_theme = os.environ.get('ACTIVE_BACK_THEME', 'SNEAT')
+    active_front_theme = get_value('ACTIVE_FRONT_THEME')
+    active_back_theme = get_value('ACTIVE_BACK_THEME')
 
     context.update(
         {

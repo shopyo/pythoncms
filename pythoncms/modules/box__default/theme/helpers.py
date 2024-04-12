@@ -3,10 +3,10 @@ import os
 
 from flask import url_for
 from init import themes_path
-
+from modules.box__default.keyvalue.helpers import get_value
 
 def get_front_theme_dir():
-    theme_dir = os.path.join(themes_path, "front", os.environ.get('ACTIVE_FRONT_THEME', 'editorial'))
+    theme_dir = os.path.join(themes_path, "front", get_value('ACTIVE_FRONT_THEME'))
     return theme_dir
 
 
@@ -18,7 +18,7 @@ def get_front_theme_info_data():
 
 
 def get_active_front_theme():
-    return os.environ.get('ACTIVE_FRONT_THEME', 'editorial')
+    return get_value('ACTIVE_FRONT_THEME')
 
 
 def get_active_front_theme_version():
@@ -34,7 +34,7 @@ def get_active_front_theme_styles_url():
 
 
 def get_back_theme_dir():
-    theme_dir = os.path.join(themes_path, "back", os.environ.get('ACTIVE_BACK_THEME', 'sneat'))
+    theme_dir = os.path.join(themes_path, "back", get_value('ACTIVE_BACK_THEME'))
     return theme_dir
 
 
@@ -46,7 +46,7 @@ def get_back_theme_info_data():
 
 
 def get_active_back_theme():
-    return os.environ.get('ACTIVE_BACK_THEME', 'sneat')
+    return get_value('ACTIVE_BACK_THEME')
 
 
 def get_active_back_theme_version():
