@@ -3,7 +3,9 @@ from init import db
 
 class Settings(db.Model):
     __tablename__ = "settings"
-    setting = db.Column(db.String(100), primary_key=True)
+    id = db.Column(db.Integer, primary_key=True)
+
+    setting = db.Column(db.String(100), unique=True)
     value = db.Column(db.String(100))
 
     def add(self):
