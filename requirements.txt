@@ -1,2 +1,3 @@
 shopyo==4.8.6
 SQLAlchemy==1.4.46
+python-dotenv

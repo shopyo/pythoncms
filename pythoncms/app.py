@@ -40,6 +40,10 @@ from modules.box__default.keyvalue.models import KeyValue
 from init import db
 
 
+from dotenv import load_dotenv
+
+load_dotenv()
+
 def create_app(config_name="development"):
 
     global_template_variables = {}
