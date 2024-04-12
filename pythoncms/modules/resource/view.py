@@ -13,7 +13,6 @@ from flask import send_from_directory
 # from flask_login import login_required
 # from PIL import Image as PILimage
 
-# from shopyo.api.enhance import get_setting
 # from shopyo.api.file import delete_file
 
 # from modules.box__ecommerce.product.models import Product

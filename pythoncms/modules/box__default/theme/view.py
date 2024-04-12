@@ -7,8 +7,6 @@ from flask import redirect
 from flask import render_template
 from flask import url_for
 from flask_login import login_required
-from modules.box__default.settings.helpers import get_setting
-from modules.box__default.settings.helpers import set_setting
 from shopyo.api.file import get_folders
 
 # from flask import flash
@@ -67,8 +65,8 @@ def index():
         with open(info_path) as f:
             all_back_info[folder] = json.load(f)
 
-    active_front_theme = get_setting("ACTIVE_FRONT_THEME")
-    active_back_theme = get_setting("ACTIVE_BACK_THEME")
+    active_front_theme = os.environ.get('ACTIVE_FRONT_THEME', 'editorial')
+    active_back_theme = os.environ.get('ACTIVE_BACK_THEME', 'SNEAT')
 
     context.update(
         {
@@ -88,7 +86,7 @@ def index():
 @module_blueprint.route("/activate/front/<theme_name>")
 @login_required
 def activate_front_theme(theme_name):
-    set_setting("ACTIVE_FRONT_THEME", theme_name)
+    os.environ['ACTIVE_FRONT_THEME"'] = theme_name
 
     # with app.app_context():
 
@@ -100,7 +98,7 @@ def activate_front_theme(theme_name):
 @module_blueprint.route("/activate/back/<theme_name>")
 @login_required
 def activate_back_theme(theme_name):
-    set_setting("ACTIVE_BACK_THEME", theme_name)
+    os.environ['ACTIVE_BACK_THEME"'] = theme_name
 
     # with app.app_context():
 
