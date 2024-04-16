@@ -3,6 +3,8 @@
 
 {%block content%}
 <br>
+<i>Note: change theme in .env file also </i>
+<br>
 <div class="container">
 
 <br>
@@ -81,6 +83,43 @@
             </table>
         </div>
     </div>
+    <br>
+    <div class="card" style="color: black">
+        <div class="card-header">
+            Iconset
+        </div>
+        <div class="card-body">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {%for icon in ['fa', 'boxicons']%}
+                        <tr>
+                            <td>{{icon}}</td>
+                            <td>
+                                {%if active_iconset != icon%}
+                                    <a class="" href="{{url_for('theme.activate_iconset', name=icon)}}">
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="radio" value=""  disabled="">
+                                          </div>
+                                    </a>
+                                {%else%}
+                                <div class="form-check">
+                                    <input name="" class="form-check-input" type="radio" value="" checked="">
+                                  </div>
+                                {%endif%}
+                            </td>
+                        </tr>
+                    {%endfor%}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
 <div>
 
 </div>

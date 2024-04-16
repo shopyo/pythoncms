@@ -12,27 +12,26 @@
             <h3>New page</h3>
             <form action="{{url_for('{}.check_pagecontent'.format(module_name))}}" method="POST">
                 {{ form.title.label }}
-                <div class="input-group mb-3">
+
                     {{ form.title }}
-                    <span id="error" type="text" vissiblity='hidden'></span>
-                </div>
+
+
                 {{ form.slug.label }}
-                <div class="input-group mb-3">
+
                     {{ form.slug }}
-                    <span id="error" type="text" vissiblity='hidden'></span>
-                </div>
-                <div class="field">
+
+
                     {{ form.lang.label }} <br>
-                    <div class="input-group mb-3">
+
                         {{ form.lang }}
-                    </div>
-                </div>
-                <div class="field">
+
+
+
                     {{ form.content.label }} <br>
-                    <div class="input-group mb-3">
+
                         {{ form.content }}
-                    </div>
-                </div>
+
+
 
 
                 <input type="hidden" name="csrf_token" value="{{csrf_token()}}">
@@ -41,12 +40,12 @@
         </div>
     </div>
 </div>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/tinymce/6.3.1/tinymce.min.js" integrity="sha512-eV68QXP3t5Jbsf18jfqT8xclEJSGvSK5uClUuqayUbF5IRK8e2/VSXIFHzEoBnNcvLBkHngnnd3CY7AFpUhF7w==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/tinymce/6.8.3/tinymce.min.js" integrity="sha512-eV68QXP3t5Jbsf18jfqT8xclEJSGvSK5uClUuqayUbF5IRK8e2/VSXIFHzEoBnNcvLBkHngnnd3CY7AFpUhF7w==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 <script type="text/javascript">
 tinymce.init({
     selector: '#content',
-    plugins: `advlist autolink link image imagetools lists
-                charmap print preview hr anchor pagebreak
+    plugins: `advlist autolink link image  lists
+                charmap print preview  anchor pagebreak
         searchreplace wordcount visualblocks visualchars code
         fullscreen insertdatetime media nonbreaking
         save table directionality template paste
