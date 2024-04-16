@@ -68,6 +68,7 @@ def index():
 
     active_front_theme = get_value('ACTIVE_FRONT_THEME')
     active_back_theme = get_value('ACTIVE_BACK_THEME')
+    active_iconset = get_value('ACTIVE_ICONSET')
 
     context.update(
         {
@@ -75,6 +76,7 @@ def index():
             "all_back_info": all_back_info,
             "active_front_theme": active_front_theme,
             "active_back_theme": active_back_theme,
+            "active_iconset": active_iconset
         }
     )
     context.update(module_settings)
@@ -100,6 +102,17 @@ def activate_front_theme(theme_name):
 @login_required
 def activate_back_theme(theme_name):
     set_value('ACTIVE_BACK_THEME', theme_name)
+
+    # with app.app_context():
+
+    # current_app.jinja_loader,
+    # print(current_app.jinja_loader.list_templates())
+    return redirect(url_for("{}.index".format(module_info["module_name"])))
+
+@module_blueprint.route("/activate/inconset/<name>")
+@login_required
+def activate_iconset(name):
+    set_value('ACTIVE_ICONSET', name) # fa, boxicons
 
     # with app.app_context():
 
