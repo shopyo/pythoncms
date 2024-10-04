@@ -82,7 +82,7 @@
 									<h2>Posts</h2>
 								</header>
 								<div class="posts">
-									{%for page in get_pages()%}
+									{%for page in shopyo_page.get_pages()%}
 									<article>
 										<a href="#" class="image"><img src="{{url_for('static', filename='themes/front/editorial/images/pic01.jpg')}}" alt="" /></a>
 										<h3>{{page.title}}</h3>
