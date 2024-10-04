@@ -22,6 +22,7 @@ from shopyo.api.assets import get_static
 from shopyo.api.assets import register_devstatic
 from shopyo.api.debug import is_yo_debug
 from shopyo.api.file import trycopy
+import click
 
 import sqlalchemy
 
@@ -38,8 +39,8 @@ from init import installed_packages
 
 from shopyo_admin import MyAdminIndexView
 from shopyo_admin import DefaultModelView
-from modules.box__default.keyvalue.models import KeyValue
-from modules.box__default.keyvalue.helpers import set_value
+from shopyo_settings.models import Settings
+from shopyo_settings.helpers import set_setting as set_value
 from init import db
 
 
@@ -64,12 +65,41 @@ def create_app(config_name="development"):
     load_config_from_instance(app, config_name)
     create_config_json()
     load_extensions(app)
+
+    from shopyo_base import ShopyoBase
+    from shopyo_auth import ShopyoAuth
+    from shopyo_appadmin import ShopyoAppAdmin
+    from shopyo_dashboard import ShopyoDashboard
+    from shopyo_page import ShopyoPage
+    from shopyo_i18n import Shopyoi18n
+    from shopyo_settings import ShopyoSettings 
+    from shopyo_theme import ShopyoTheme
+
+    sh_base = ShopyoBase()
+    sh_auth = ShopyoAuth()
+    sh_appadmin = ShopyoAppAdmin()
+    sh_dashboard = ShopyoDashboard()
+    sh_page = ShopyoPage()
+    sh_i18n = Shopyoi18n()
+    sh_settings = ShopyoSettings()
+    sh_theme = ShopyoTheme()
+
+    sh_base.init_app(app)
+    sh_auth.init_app(app)
+    sh_appadmin.init_app(app)
+    sh_dashboard.init_app(app)
+    sh_page.init_app(app)
+    sh_i18n.init_app(app)
+    sh_settings.init_app(app)
+    sh_theme.init_app(app)
+
     setup_flask_admin(app)
     register_devstatic(app, modules_path)
     load_blueprints(app, config_name, global_template_variables, global_configs)
     setup_theme_paths(app)
     inject_global_vars(app, global_template_variables)
     sync_keyvalue_envvar(app)
+    custom_commands(db, app)
     return app
 
 
@@ -151,7 +181,7 @@ def setup_flask_admin(app):
         template_mode="bootstrap4",
         index_view=MyAdminIndexView(),
     )
-    admin.add_view(DefaultModelView(KeyValue, db.session))
+    admin.add_view(DefaultModelView(Settings, db.session))
     admin.add_link(MenuLink(name="Logout", category="", url="/auth/logout?next=/admin"))
 
 
@@ -277,7 +307,8 @@ def inject_global_vars(app, global_template_variables):
             "len": len,
             "current_user": current_user,
             "get_static": get_static,
-            "get_setting": get_setting
+            "get_setting": get_setting,
+            "get_value": get_setting
         }
         base_context.update(global_template_variables)
 
@@ -308,3 +339,24 @@ def sync_keyvalue_envvar(app):
         except sqlalchemy.exc.OperationalError as e: # on shopyo initialise command
             if os.environ.get('FLASK_DEBUG', False):
                 print(e)
+
+def custom_commands(db, app):
+    from flask.cli import with_appcontext
+
+    @click.command("shopyo-seed")
+    @with_appcontext
+    def shopyo_upload():
+
+        for ext in app.extensions:
+            if ext.startswith("shopyo_"):
+                try:
+                    e = app.extensions[ext]
+                    e.upload()
+                    db.session.commit()
+                    click.echo("Uploaded for " + ext)
+                except AttributeError as e:
+                    pass
+
+    app.cli.add_command(shopyo_upload)
+
+

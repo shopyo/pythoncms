@@ -28,6 +28,7 @@ pip install pythoncms
 pythoncms start mysite
 cd mysite
 shopyo initialise
+flask shopyo-seed
 flask --debug run
 ```
 

@@ -7,6 +7,9 @@
       "APP_NAME": "Demo",
       "ACTIVE_FRONT_THEME": "editorial",
       "ACTIVE_BACK_THEME": "sneat",
+      "ACTIVE_ICONSET": "fa",
+      "SITE_TITLE": "My site",
+      "SITE_DESCRIPTION": "description",
       "CURRENCY": "MUR",
       "ACTIVE_ICONSET": "boxicons"
     }
