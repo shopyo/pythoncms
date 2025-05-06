@@ -1,6 +1,10 @@
 shopyo==4.12.1
 SQLAlchemy==1.4.46
 python-dotenv
+shopyo-appadmin==1.2.0
+shopyo-auth==1.2.0
+shopyo-base==1.2.0
+shopyo-dashboard==1.1.1
 shopyo-i18n==1.1.0
 shopyo-page==1.2.0
 shopyo-settings==1.2.0
