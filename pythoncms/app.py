@@ -357,6 +357,45 @@ def custom_commands(db, app):
                 except AttributeError as e:
                     pass
 
+    @click.command("update-password")
+    @click.argument("email")
+    @click.argument("password")
+    @with_appcontext
+    def update_password(email, password):
+        from shopyo_auth.models import User
+
+        user = User.query.filter_by(email=email).first()
+        if user:
+            user.password = password
+            db.session.commit()
+            click.echo(f"Password updated for {email}")
+        else:
+            click.echo(f"User {email} not found")
+
+    @click.command("add-user")
+    @click.argument("email")
+    @click.argument("password")
+    @click.option("--admin", is_flag=True, help="Create as admin")
+    @with_appcontext
+    def add_user(email, password, admin):
+        from shopyo_auth.models import User
+
+        user = User.query.filter_by(email=email).first()
+        if user:
+            click.echo(f"User {email} already exists")
+        else:
+            new_user = User()
+            new_user.email = email
+            new_user.password = password
+            new_user.is_email_confirmed = True
+            if admin:
+                new_user.is_admin = True
+            db.session.add(new_user)
+            db.session.commit()
+            click.echo(f"User {email} created")
+
     app.cli.add_command(shopyo_upload)
+    app.cli.add_command(update_password)
+    app.cli.add_command(add_user)
 
 

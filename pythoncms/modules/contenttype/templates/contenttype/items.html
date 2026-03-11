@@ -1,0 +1,58 @@
+{% extends get_active_back_theme()+'/base.html' %}
+
+{% block content %}
+<div class="container-xxl flex-grow-1 container-p-y">
+    <h4 class="fw-bold py-3 mb-4">
+        <span class="text-muted fw-light">Content /</span> {{ content_type.name }} Items
+    </h4>
+
+    <div class="card">
+        <div class="card-header d-flex justify-content-between align-items-center">
+            <h5 class="mb-0">{{ content_type.name }}</h5>
+            <a href="{{ url_for('contenttype.item_add', type_id=content_type.id) }}" class="btn btn-primary">Add New Item</a>
+        </div>
+        <div class="table-responsive text-nowrap">
+            <table class="table">
+                <thead>
+                    <tr>
+                        {% for field in content_type.schema %}
+                        <th>{{ field.name|capitalize }}</th>
+                        {% endfor %}
+                        <th>Created</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody class="table-border-bottom-0">
+                    {% for item in items %}
+                    <tr>
+                        {% for field in content_type.schema %}
+                        <td>{{ item.data.get(field.name, '')|truncate(50) }}</td>
+                        {% endfor %}
+                        <td>{{ item.created_at.strftime('%Y-%m-%d') }}</td>
+                        <td>
+                            <div class="dropdown">
+                                <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
+                                    <i class="bx bx-dots-vertical-rounded"></i>
+                                </button>
+                                <div class="dropdown-menu">
+                                    <a class="dropdown-item" href="{{ url_for('contenttype.item_edit', item_id=item.id) }}">
+                                        <i class="bx bx-edit-alt me-1"></i> Edit
+                                    </a>
+                                    <a class="dropdown-item text-danger" href="{{ url_for('contenttype.item_delete', item_id=item.id) }}" onclick="return confirm('Are you sure?')">
+                                        <i class="bx bx-trash me-1"></i> Delete
+                                    </a>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                    {% else %}
+                    <tr>
+                        <td colspan="{{ content_type.schema|length + 2 }}" class="text-center">No items found.</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}
