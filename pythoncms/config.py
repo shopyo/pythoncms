@@ -77,7 +77,9 @@ class DevelopmentConfig(BaseConfig):
     MAIL_DEFAULT_SENDER = "ma@mail.com"
 
     # database configs
-    SQLALCHEMY_DATABASE_URI = "sqlite:///shopyo.db"
+    SQLALCHEMY_DATABASE_URI = (
+        os.environ.get("SQLALCHEMY_DATABASE_URI") or "sqlite:///shopyo.db"
+    )
 
     # unknown configs
     PASSWORD_SALT = "some pasword salt"
