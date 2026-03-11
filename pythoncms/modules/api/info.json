@@ -1,0 +1,16 @@
+{
+    "display_string": "API",
+    "type": "show",
+    "icons": {
+        "fa": "fas fa-network-wired",
+        "boxicons": "bx bx-network-chart"
+    },
+    "url_prefix": "/api/v1",
+    "menu-type": "no-menu",
+    "module_name": "api",
+    "author": {
+        "name": "pythoncms",
+        "website": "https://github.com/shopyo/pythoncms",
+        "mail": ""
+    }
+}
