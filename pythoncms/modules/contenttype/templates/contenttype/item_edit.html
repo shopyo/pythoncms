@@ -1,0 +1,90 @@
+{% extends get_active_back_theme()+'/base.html' %}
+
+{% block content %}
+<div class="container-xxl flex-grow-1 container-p-y">
+    <h4 class="fw-bold py-3 mb-4">
+        <span class="text-muted fw-light">Content / {{ content_type.name }} /</span> 
+        {% if item %}Edit{% else %}Add{% endif %} Item
+    </h4>
+
+    <div class="row">
+        <div class="col-xl">
+            <div class="card mb-4">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0">{% if item %}Edit{% else %}New{% endif %} {{ content_type.name }}</h5>
+                </div>
+                <div class="card-body">
+                    <form method="POST">
+                        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+                        
+                        {% for field in content_type.schema %}
+                        <div class="mb-3">
+                            <label class="form-label" for="{{ field.name }}">{{ field.name|capitalize }}</label>
+                            
+                            {% if field.type == 'text' %}
+                            <input type="text" class="form-control" id="{{ field.name }}" name="{{ field.name }}" 
+                                   value="{{ item.data.get(field.name, '') if item else '' }}" required />
+                                   
+                            {% elif field.type == 'textarea' %}
+                            <textarea id="{{ field.name }}" name="{{ field.name }}" class="form-control" rows="5" required>{{ item.data.get(field.name, '') if item else '' }}</textarea>
+                            
+                            {% elif field.type == 'richtext' %}
+                            <textarea id="{{ field.name }}" name="{{ field.name }}" class="form-control richtext" rows="10">{{ item.data.get(field.name, '') if item else '' }}</textarea>
+                            
+                            {% elif field.type == 'image' %}
+                            <div class="input-group">
+                                <span class="input-group-text"><i class="bx bx-image"></i></span>
+                                <input type="text" class="form-control image-input" id="{{ field.name }}" name="{{ field.name }}" 
+                                       placeholder="https://..." value="{{ item.data.get(field.name, '') if item else '' }}" />
+                            </div>
+                            <div class="mt-2 image-preview-container" id="preview-{{ field.name }}">
+                                {% if item and item.data.get(field.name) %}
+                                <img src="{{ item.data.get(field.name) }}" class="img-thumbnail" style="max-height: 200px;">
+                                {% endif %}
+                            </div>
+                            
+                            {% elif field.type == 'number' %}
+                            <input type="number" class="form-control" id="{{ field.name }}" name="{{ field.name }}" 
+                                   value="{{ item.data.get(field.name, '') if item else '' }}" required />
+                                   
+                            {% elif field.type == 'date' %}
+                            <input type="date" class="form-control" id="{{ field.name }}" name="{{ field.name }}" 
+                                   value="{{ item.data.get(field.name, '') if item else '' }}" required />
+                            {% endif %}
+                        </div>
+                        {% endfor %}
+                        
+                        <div class="mt-4">
+                            <button type="submit" class="btn btn-primary">Save Item</button>
+                            <a href="{{ url_for('contenttype.items', type_id=content_type.id) }}" class="btn btn-outline-secondary">Cancel</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.tiny.cloud/1/no-api-key/tinymce/6/tinymce.min.js" referrerpolicy="origin"></script>
+<script>
+    tinymce.init({
+        selector: '.richtext',
+        plugins: 'anchor autolink charmap codesample emoticons image link lists media searchreplace table visualblocks wordcount',
+        toolbar: 'undo redo | blocks fontfamily fontsize | bold italic underline strikethrough | link image media table | align lineheight | numlist bullist indent outdent | emoticons charmap | removeformat',
+        height: 500
+    });
+    
+    // Simple Image Preview
+    document.querySelectorAll('.image-input').forEach(input => {
+        input.addEventListener('input', function() {
+            const previewId = 'preview-' + this.id;
+            const container = document.getElementById(previewId);
+            if (this.value) {
+                container.innerHTML = `<img src="${this.value}" class="img-thumbnail" style="max-height: 200px;" onerror="this.style.display='none'">`;
+            } else {
+                container.innerHTML = '';
+            }
+        });
+    });
+</script>
+{% endblock %}
