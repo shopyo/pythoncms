@@ -103,3 +103,65 @@ def run(debug):
         args.append("--debug")
     args.append("run")
     subprocess.run(args, check=True)
+
+
+@cli.command("deploy")
+def deploy():
+    """Generate production deployment files"""
+    
+    dockerfile_content = """FROM python:3.11-slim
+
+WORKDIR /app
+
+ENV PYTHONDONTWRITEBYTECODE 1
+ENV PYTHONUNBUFFERED 1
+ENV FLASK_APP=pythoncms.app:create_app
+
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    gcc \
+    libpq-dev \
+    && rm -rf /var/lib/apt/lists/*
+
+COPY requirements.txt .
+RUN pip install --upgrade pip && pip install --no-cache-dir -r requirements.txt
+RUN pip install gunicorn
+
+COPY . .
+
+CMD ["gunicorn", "--bind", "0.0.0.0:8000", "pythoncms.app:create_app('production')"]
+"""
+
+    dockerignore_content = """__pycache__
+*.pyc
+*.pyo
+*.pyd
+.Python
+env/
+venv/
+.env
+.DS_Store
+"""
+
+    docker_compose_content = """version: '3.8'
+
+services:
+  web:
+    build: .
+    command: gunicorn --bind 0.0.0.0:8000 "pythoncms.app:create_app('production')"
+    volumes:
+      - .:/app
+    ports:
+      - "8000:8000"
+    env_file:
+      - .env
+    environment:
+      - FLASK_ENV=production
+"""
+
+    trymkfile("Dockerfile", dockerfile_content)
+    trymkfile(".dockerignore", dockerignore_content)
+    trymkfile("docker-compose.yml", docker_compose_content)
+    
+    click.echo("🚀 Deployment files generated!")
+    click.echo("Run 'docker-compose up --build' to test locally.")
+    click.echo("Or deploy the Dockerfile to any cloud provider (Fly.io, Railway, etc).")
