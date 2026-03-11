@@ -14,6 +14,7 @@ Example command 'welcome' has been added.
 - Run the sample command as ``pythoncms welcome [OPTIONS] NAME``
 """
 import os
+import secrets
 import subprocess
 import sys
 from pathlib import Path
@@ -47,9 +48,6 @@ def start(name, run):
         return
 
     # Copy the project structure
-    # We copy the parent of this file (pythoncms/ directory)
-    # but we need to exclude things like __pycache__ and cli.py from the target if needed
-    # actually the original logic was trycopytree(str(path.parent.absolute()), dest)
     trycopytree(str(path.parent.absolute()), dest)
     
     # Cleanup target
@@ -60,10 +58,17 @@ def start(name, run):
     trymkfile(os.path.join(dest, "requirements.txt"), reqs)
     
     # Setup .env
-    env_demo = os.path.join(dest, ".env_demo")
     env_real = os.path.join(dest, ".env")
-    if os.path.exists(env_demo):
-        os.rename(env_demo, env_real)
+    
+    env_content = f"""ACTIVE_FRONT_THEME = 'editorial'
+ACTIVE_BACK_THEME = 'sneat'
+APP_NAME = 'Demo'
+ACTIVE_ICONSET = 'boxicons'
+SITE_TITLE = 'Site title'
+SITE_DESCRIPTION = 'Site title'
+SECRET_KEY = '{secrets.token_hex(32)}'
+"""
+    trymkfile(env_real, env_content)
     
     click.echo(f"🍭  Pythoncms project {name} is ready!")
 
