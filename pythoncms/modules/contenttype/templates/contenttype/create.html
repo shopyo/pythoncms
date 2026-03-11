@@ -1,0 +1,104 @@
+{% extends get_active_back_theme()+'/base.html' %}
+
+{% block content %}
+<div class="container-xxl flex-grow-1 container-p-y">
+    <h4 class="fw-bold py-3 mb-4"><span class="text-muted fw-light">Content /</span> Create Type</h4>
+
+    <div class="row">
+        <div class="col-xl">
+            <div class="card mb-4">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0">New Content Type</h5>
+                </div>
+                <div class="card-body">
+                    <form method="POST">
+                        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+                        <div class="mb-3">
+                            <label class="form-label" for="name">Type Name</label>
+                            <input type="text" class="form-label form-control" id="name" name="name" placeholder="e.g. Blog Post" required />
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label" for="description">Description</label>
+                            <textarea id="description" name="description" class="form-control" placeholder="What is this content type for?"></textarea>
+                        </div>
+                        
+                        <hr>
+                        <h5>Fields</h5>
+                        <div id="fields-container">
+                            <div class="row mb-3 field-row">
+                                <div class="col-md-5">
+                                    <input type="text" name="field_name[]" class="form-control" placeholder="Field Name (e.g. title)" required>
+                                </div>
+                                <div class="col-md-5">
+                                    <select name="field_type[]" class="form-select">
+                                        <option value="text">🔤 Text (Short)</option>
+                                        <option value="richtext">📝 Rich Text (Editor)</option>
+                                        <option value="textarea">📄 Textarea (Long)</option>
+                                        <option value="image">🖼️ Image (URL)</option>
+                                        <option value="number">🔢 Number</option>
+                                        <option value="date">📅 Date</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-2">
+                                    <button type="button" class="btn btn-danger remove-field"><i class="bx bx-trash"></i></button>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <button type="button" id="add-field" class="btn btn-outline-primary mb-3">
+                            <i class="bx bx-plus me-1"></i> Add Field
+                        </button>
+                        
+                        <div class="mt-4">
+                            <button type="submit" class="btn btn-primary">Create Content Type</button>
+                            <a href="{{ url_for('contenttype.dashboard') }}" class="btn btn-outline-secondary">Cancel</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const container = document.getElementById('fields-container');
+    const addButton = document.getElementById('add-field');
+    
+    addButton.addEventListener('click', function() {
+        const row = document.createElement('div');
+        row.className = 'row mb-3 field-row';
+        row.innerHTML = `
+            <div class="col-md-5">
+                <input type="text" name="field_name[]" class="form-control" placeholder="Field Name" required>
+            </div>
+            <div class="col-md-5">
+                <select name="field_type[]" class="form-select">
+                    <option value="text">🔤 Text (Short)</option>
+                    <option value="richtext">📝 Rich Text (Editor)</option>
+                    <option value="textarea">📄 Textarea (Long)</option>
+                    <option value="image">🖼️ Image (URL)</option>
+                    <option value="number">🔢 Number</option>
+                    <option value="date">📅 Date</option>
+                </select>
+            </div>
+            <div class="col-md-2">
+                <button type="button" class="btn btn-danger remove-field"><i class="bx bx-trash"></i></button>
+            </div>
+        `;
+        container.appendChild(row);
+    });
+    
+    container.addEventListener('click', function(e) {
+        if (e.target.closest('.remove-field')) {
+            const rows = container.querySelectorAll('.field-row');
+            if (rows.length > 1) {
+                e.target.closest('.field-row').remove();
+            } else {
+                alert('At least one field is required');
+            }
+        }
+    });
+});
+</script>
+{% endblock %}
