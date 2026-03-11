@@ -41,25 +41,12 @@ def cli():
 @click.option("--run", is_flag=True, help="Initialize and run the server immediately")
 def start(name, run):
     """Create a new pythoncms project"""
-    try:
-        current_dir = Path.cwd()
-    except FileNotFoundError:
-        # Self-healing: if directory was deleted and recreated, try to recover from PWD env
-        pwd = os.environ.get("PWD")
-        if pwd and os.path.exists(pwd):
-            current_dir = Path(pwd)
-        else:
-            click.echo(
-                "Error: Your current directory has been deleted. Please 'cd' out and back in."
-            )
-            return
-
-    dest = os.path.join(str(current_dir), name)
-
+    dest = os.path.abspath(name)
 
     if os.path.exists(dest):
         click.echo(f"Error: Directory {name} already exists.")
         return
+
 
     # Copy the project structure
     trycopytree(str(path.parent.absolute()), dest)
