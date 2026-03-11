@@ -4,20 +4,36 @@
 
 **The fastest way to start a CMS in Python.** Build production-grade sites with zero-config, modular themes, and a powerful content API.
 
-## 🚀 Get Started in 10 Seconds
+## 🚀 Quickstart
+
+The new unified CLI makes it easier than ever to get started:
 
 ```bash
 pip install pythoncms
-pythoncms start mysite
-cd mysite
-# One command to rule them all (Coming in Phase 1)
-shopyo initialise
-flask shopyo-seed
-flask --debug run
+pythoncms start mysite --run
 ```
 
-Open your browser to: `http://127.0.0.1:5000/dashboard/`  
-**Login:** `admin@domain.com` | `pass`
+This single command will:
+1. Create your project directory.
+2. Generate a secure `.env` file.
+3. Initialise the database.
+4. Seed the default admin user.
+5. Start the development server.
+
+Open: `http://localhost:5000/dashboard`  
+Login: `admin@domain.com` / `pass`
+
+---
+
+## 🛠️ Unified CLI Commands
+
+Manage your entire project from one place:
+
+- `pythoncms start <name>`: Create a new project.
+- `pythoncms run`: Start the dev server.
+- `pythoncms initialise`: Set up database and assets.
+- `pythoncms seed`: Reset default data.
+- `pythoncms --version`: Check your version.
 
 ---
 
