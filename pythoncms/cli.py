@@ -41,7 +41,13 @@ def cli():
 @click.option("--run", is_flag=True, help="Initialize and run the server immediately")
 def start(name, run):
     """Create a new pythoncms project"""
-    dest = os.path.join(os.getcwd(), name)
+    try:
+        current_dir = Path.cwd()
+    except FileNotFoundError:
+        click.echo("Error: The current working directory does not exist. Please change to a valid directory.")
+        return
+
+    dest = os.path.join(str(current_dir), name)
 
     if os.path.exists(dest):
         click.echo(f"Error: Directory {name} already exists.")
