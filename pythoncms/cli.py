@@ -30,7 +30,7 @@ path = Path(__file__)
 
 
 @click.group()
-@click.version_option(__version__)
+@click.version_option(__version__, prog_name="pythoncms")
 def cli():
     """pythoncms CLI - The fastest way to build CMS in Python"""
     pass

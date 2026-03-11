@@ -11,11 +11,11 @@
 #      __main__.main()
 #      captured = capfd.readouterr()
 #      assert "Please use Shopyo in a virtual environment for this command" in captured.out
-import subprocess
-import sys
+from click.testing import CliRunner
+from pythoncms.cli import cli
 
-
-def test_no_args(capfd):
-    subprocess.run([sys.executable, "__main__.py"], text=True)
-    captured = capfd.readouterr()
-    assert "No arguments supplied" in captured.out
+def test_no_args():
+    runner = CliRunner()
+    result = runner.invoke(cli)
+    assert result.exit_code == 0
+    assert "The fastest way to build CMS in Python" in result.output

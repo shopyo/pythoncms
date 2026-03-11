@@ -12,8 +12,8 @@ from app import create_app
 from flask import url_for
 from flask_login import current_user as _current_user
 from init import db as _db
-from modules.box__default.auth.models import User
-from modules.box__default.keyvalue.models import Settings
+from shopyo_auth.models import User
+from shopyo_settings.models import Settings
 from sqlalchemy import event
 
 # run in shopyo/shopyo
@@ -111,8 +111,12 @@ def db(test_client, non_admin_user, admin_user, unconfirmed_user):
     with open("config.json") as config:
         config = json.load(config)
     for name, value in config["settings"].items():
-        s = Settings(setting=name, value=value)
-        _db.session.add(s)
+        existing = Settings.query.filter_by(setting=name).first()
+        if not existing:
+            s = Settings(setting=name, value=value)
+            _db.session.add(s)
+        else:
+            existing.value = value
 
     # Commit the changes for the users
     _db.session.commit()
