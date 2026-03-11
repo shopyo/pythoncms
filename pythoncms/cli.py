@@ -75,30 +75,40 @@ SECRET_KEY = '{secrets.token_hex(32)}'
     if run:
         os.chdir(dest)
         click.echo("Running initialization...")
-        subprocess.run(["shopyo", "initialise"], check=True)
+        bin_dir = os.path.dirname(sys.executable)
+        shopyo_cmd = os.path.join(bin_dir, "shopyo")
+        flask_cmd = os.path.join(bin_dir, "flask")
+        
+        subprocess.run([shopyo_cmd, "initialise"], check=True)
         click.echo("Seeding database...")
-        subprocess.run(["flask", "shopyo-seed"], check=True)
+        subprocess.run([flask_cmd, "shopyo-seed"], check=True)
         click.echo("Starting server...")
-        subprocess.run(["flask", "--debug", "run"], check=True)
+        subprocess.run([flask_cmd, "--debug", "run"], check=True)
 
 
 @cli.command("initialise")
 def initialise():
     """Initialise the project database and assets"""
-    subprocess.run(["shopyo", "initialise"], check=True)
+    bin_dir = os.path.dirname(sys.executable)
+    shopyo_cmd = os.path.join(bin_dir, "shopyo")
+    subprocess.run([shopyo_cmd, "initialise"], check=True)
 
 
 @cli.command("seed")
 def seed():
     """Seed the database with default data"""
-    subprocess.run(["flask", "shopyo-seed"], check=True)
+    bin_dir = os.path.dirname(sys.executable)
+    flask_cmd = os.path.join(bin_dir, "flask")
+    subprocess.run([flask_cmd, "shopyo-seed"], check=True)
 
 
 @cli.command("run")
 @click.option("--debug", is_flag=True, default=True)
 def run(debug):
     """Run the development server"""
-    args = ["flask"]
+    bin_dir = os.path.dirname(sys.executable)
+    flask_cmd = os.path.join(bin_dir, "flask")
+    args = [flask_cmd]
     if debug:
         args.append("--debug")
     args.append("run")
