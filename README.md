@@ -37,6 +37,29 @@ Manage your entire project from one place:
 
 ---
 
+## ⚙️ Configuration
+
+Your project settings are managed via the `.env` file in your root directory.
+
+### Database Connection
+By default, `pythoncms` uses SQLite. To use a different database, update the `SQLALCHEMY_DATABASE_URI`:
+
+```bash
+# SQLite (default)
+SQLALCHEMY_DATABASE_URI = "sqlite:///mysite.db"
+
+# PostgreSQL
+SQLALCHEMY_DATABASE_URI = "postgresql://user:password@localhost/dbname"
+```
+
+### Other Settings
+- `APP_NAME`: Change the display name of your application.
+- `SECRET_KEY`: Used for session encryption. Automatically generated on `start`.
+- `ACTIVE_FRONT_THEME`: Choose between `editorial` or `hyperspace`.
+- `ACTIVE_BACK_THEME`: Choose between `sneat` or `sbadmin`.
+
+---
+
 ## ✨ Features
 
 - 🏗️ **Content Types:** Define custom schemas with JSON.
