@@ -1,0 +1,61 @@
+{% extends get_active_back_theme()+'/base.html' %}
+
+{% block content %}
+<div class="container-xxl flex-grow-1 container-p-y">
+    <h4 class="fw-bold py-3 mb-4"><span class="text-muted fw-light">Content /</span> Manage Types</h4>
+
+    <div class="card">
+        <div class="card-header d-flex justify-content-between align-items-center">
+            <h5 class="mb-0">Content Types</h5>
+            <a href="{{ url_for('contenttype.create') }}" class="btn btn-primary">Create New Type</a>
+        </div>
+        <div class="table-responsive text-nowrap">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Description</th>
+                        <th>Fields</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody class="table-border-bottom-0">
+                    {% for ct in content_types %}
+                    <tr>
+                        <td><strong>{{ ct.name }}</strong></td>
+                        <td>{{ ct.description }}</td>
+                        <td>
+                            {% for field in ct.schema %}
+                            <span class="badge bg-label-info me-1">{{ field.name }} ({{ field.type }})</span>
+                            {% endfor %}
+                        </td>
+                        <td>
+                            <div class="dropdown">
+                                <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
+                                    <i class="bx bx-dots-vertical-rounded"></i>
+                                </button>
+                                <div class="dropdown-menu">
+                                    <a class="dropdown-item" href="{{ url_for('contenttype.items', type_id=ct.id) }}">
+                                        <i class="bx bx-list-ul me-1"></i> View Items
+                                    </a>
+                                    <a class="dropdown-item" href="{{ url_for('contenttype.item_add', type_id=ct.id) }}">
+                                        <i class="bx bx-plus me-1"></i> Add Item
+                                    </a>
+                                    <a class="dropdown-item text-danger" href="{{ url_for('contenttype.delete_type', type_id=ct.id) }}" onclick="return confirm('Are you sure?')">
+                                        <i class="bx bx-trash me-1"></i> Delete Type
+                                    </a>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                    {% else %}
+                    <tr>
+                        <td colspan="4" class="text-center">No content types defined yet.</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}

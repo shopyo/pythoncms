@@ -1,0 +1,17 @@
+{
+    "author": {
+        "mail": "",
+        "name": "",
+        "website": ""
+    },
+    "display_string": "Content Types",
+    "fa-icon": "fa fa-layer-group",
+    "module_name": "contenttype",
+    "type": "show",
+    "url_prefix": "/contenttype",
+    "dashboard": "/dashboard",
+    "menu": {
+        "Manage Types": "/dashboard",
+        "Create Type": "/create"
+    }
+}
