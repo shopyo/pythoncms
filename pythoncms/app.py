@@ -10,6 +10,7 @@ Need help?
 Hope it helps! We welcome all questions and even requests for walkthroughs
 """
 import importlib
+import json
 import os
 import sys
 
@@ -64,6 +65,7 @@ def create_app(config_name="development"):
     load_config_from_obj(app, config_name)
     load_config_from_instance(app, config_name)
     create_config_json()
+    load_config_json(app)
     load_extensions(app)
 
     from shopyo_base import ShopyoBase
@@ -172,6 +174,14 @@ def load_config_from_instance(app, config_name):
 def create_config_json():
     if not os.path.exists("config.json"):
         trycopy("config_demo.json", "config.json")
+
+
+def load_config_json(app):
+    config_path = os.path.join(app.config["BASE_DIR"], "config.json")
+    if os.path.exists(config_path):
+        with open(config_path) as f:
+            data = json.load(f)
+            app.config["SEED_SETTINGS"] = data.get("settings", {})
 
 
 def setup_flask_admin(app):
@@ -285,14 +295,21 @@ def setup_theme_paths(app):
             app.config["BASE_DIR"], "static", "themes", "back"
         )
 
-        if os.path.exists(front_theme_dir) and os.path.exists(back_theme_dir):
-            my_loader = jinja2.ChoiceLoader(
-                [
-                    app.jinja_loader,
-                    jinja2.FileSystemLoader([front_theme_dir, back_theme_dir]),
-                ]
-            )
-            app.jinja_loader = my_loader
+        loaders = [app.jinja_loader]
+        if os.path.exists(front_theme_dir):
+            loaders.append(jinja2.PrefixLoader({
+                name: jinja2.FileSystemLoader(os.path.join(front_theme_dir, name))
+                for name in os.listdir(front_theme_dir)
+                if os.path.isdir(os.path.join(front_theme_dir, name))
+            }))
+        if os.path.exists(back_theme_dir):
+            loaders.append(jinja2.PrefixLoader({
+                name: jinja2.FileSystemLoader(os.path.join(back_theme_dir, name))
+                for name in os.listdir(back_theme_dir)
+                if os.path.isdir(os.path.join(back_theme_dir, name))
+            }))
+
+        app.jinja_loader = jinja2.ChoiceLoader(loaders)
 
 
 def inject_global_vars(app, global_template_variables):
@@ -302,13 +319,47 @@ def inject_global_vars(app, global_template_variables):
         def get_setting(env_var):
             return os.environ.get(env_var)
         
+        from shopyo_theme.helpers import get_active_front_theme, get_active_back_theme
+        
+        def get_url_prefix(parts=None, as_str=False):
+            from flask import request
+            prefix = "/" + request.path.split("/")[1]
+            if parts == 1 and as_str:
+                # This is a bit of a hack to match the template usage
+                # which expects something like /contact/dashboard
+                return request.path
+            return prefix
+
+        def get_modules_info():
+            from shopyo.api.module import iter_modules
+            import json
+            modules_info = {}
+            for module_name, module_path in iter_modules(base_path):
+                info_path = os.path.join(module_path, "info.json")
+                if os.path.exists(info_path):
+                    try:
+                        with open(info_path) as f:
+                            info = json.load(f)
+                            mname = info.get("module_name")
+                            if mname:
+                                if "icons" not in info:
+                                    info["icons"] = {"fa": "", "boxicons": ""}
+                                modules_info[mname] = info
+                    except Exception:
+                        pass
+            return modules_info
+
         base_context = {
             "APP_NAME": APP_NAME,
             "len": len,
             "current_user": current_user,
             "get_static": get_static,
             "get_setting": get_setting,
-            "get_value": get_setting
+            "get_value": get_setting,
+            "get_active_front_theme": get_active_front_theme,
+            "get_active_back_theme": get_active_back_theme,
+            "get_modules_info": get_modules_info,
+            "get_url_prefix": get_url_prefix
         }
         base_context.update(global_template_variables)
 
