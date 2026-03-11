@@ -1,145 +1,92 @@
-
-<div align="center">
-
-
-
-<img src="https://github.com/shopyo/pythoncms/raw/main/assets/logo.png" width="200"/>
-
-<br><br>
+# pythoncms
 
 [![First Timers Only](https://img.shields.io/badge/first--timers--only-friendly-blue.svg)](https://www.firsttimersonly.com/)
 
-🇲🇺
+**The fastest way to start a CMS in Python.** Build production-grade sites with zero-config, modular themes, and a powerful content API.
 
-</div>
+## 🚀 Get Started in 10 Seconds
 
-
-
-# Welcome to pythoncms
-
-## Try
-
-![](https://github.com/shopyo/pythoncms/raw/main/assets/term.gif)
-
-In virtual env
-
-```
+```bash
 pip install pythoncms
 pythoncms start mysite
 cd mysite
+# One command to rule them all (Coming in Phase 1)
 shopyo initialise
 flask shopyo-seed
 flask --debug run
 ```
 
-If .env file not created, create .env file with content
+Open your browser to: `http://127.0.0.1:5000/dashboard/`  
+**Login:** `admin@domain.com` | `pass`
 
-```.env
-ACTIVE_FRONT_THEME = 'editorial'
-ACTIVE_BACK_THEME = 'sneat'
-APP_NAME = 'Demo'
-ACTIVE_ICONSET = 'boxicons'
-SITE_TITLE = 'Site title'
-SITE_DESCRIPTION = 'Site title'
-```
+---
 
-## Local dev
+## ✨ Features
 
-Install package
+- 🏗️ **Content Types:** Define custom schemas with JSON.
+- 🎨 **Theme Support:** Switch between beautiful, responsive themes instantly.
+- 🔐 **Built-in Auth:** Secure admin and user management out of the box.
+- 🍱 **Modular Architecture:** Extend functionality with a robust plugin system.
+- 🖼️ **Media Management:** Simple upload and resource handling.
+- ⚡ **Flask Powered:** Minimal, fast, and easy to customize.
 
-! Important: Please create and activate a virtual environment.
+---
 
-```
-python -m pip install -e .
-```
-Then initialise
+## 📸 See it in Action
 
-```
-cd pythoncms
-shopyo initialise
-flask --debug run
-```
+### Admin Dashboard
+![Admin Dashboard](https://github.com/shopyo/pythoncms/raw/main/assets/dashboard_preview.png)
 
-for migrating
+### Page Editor
+![Page Editor](https://github.com/shopyo/pythoncms/raw/main/assets/editor_preview.png)
 
-```
-flask db migrate
-flask db upgrade
-```
+### Website Frontend
+![Website Frontend](https://github.com/shopyo/pythoncms/raw/main/assets/frontend_preview.png)
 
-run
+---
 
-```
-flask --debug run
-```
+## 🛠️ Local Development
 
-dashboard
+If you want to contribute to the core or customize the engine:
 
-login with `admin@domain.com` | `pass`
-```
-http://127.0.0.1:5000/dashboard/
-```
+1. **Clone and Install:**
+   ```bash
+   python -m pip install -e .
+   ```
 
-## Theme
+2. **Initialize:**
+   ```bash
+   cd pythoncms
+   shopyo initialise
+   flask --debug run
+   ```
 
-Themes are located at '/static/themes/'
+3. **Database Migrations:**
+   ```bash
+   flask db migrate
+   flask db upgrade
+   ```
 
-Each front theme must have
+---
 
-```
-index.html
-contact.html
-page.html
-```
+## 🎨 Themes & Customization
 
-Each back theme must have
+Themes are located at `/static/themes/`.
 
-```
-base.html
-login.html
-register.html
-unconfirmed.html
-```
+### Front Themes
+Must include `index.html`, `contact.html`, and `page.html`.
 
-- info.json
+### Back Themes
+Must include `base.html`, `login.html`, `register.html`, and `unconfirmed.html`.
 
-```json
-{
-	"author": "ARJ",
-	"version": "1.0.20000000000003"
-}
-```
+---
 
-## Info json
+## 📄 License & Community
 
-```
-{
-	"display_string": "Admin",
-	"type": "show", // hidden if hide
-	"icons":{
-		"fa": "fas fa-user-lock", // set according to ACTIVE_ICONSET
-		"boxicons": "",           // set according to ACTIVE_ICONSET
-		"file": "icon.svg" // if present, will be used and searched for
-						   // in module/static. Make sure to shopyo collecstatic in production
-	},
-	"url_prefix": "/appadmin",
-	"menu": {
-		"list users":"/", // url-prefix will be concatenated with it for sub menus.
-		"add user": "/add",
-		"roles":"/roles"
-	},
-	"menu-type": "show-menu", // or no-menu. Expects menu key if show-menu.
-	"module_name": "appadmin",
-	"author": {
-		"name":"Abdur-Rahmaan Janhangeer",
-		"website":"https://www.pythonkitchen.com/about-me/",
-		"mail":"arj.python@gmail.com"
-		}
-}
-```
-## Changelog
+- **License:** MIT
+- **Discord:** [Join our community](https://discord.com/invite/k37Ef6w)
+- **Issues:** [Report a bug](https://github.com/shopyo/pythoncms/issues)
 
-1.2.0
+---
 
-- Tiny MCE configured
-- start command
+*Powered by the Shopyo engine.*
