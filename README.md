@@ -33,7 +33,39 @@ Manage your entire project from one place:
 - `pythoncms run`: Start the dev server.
 - `pythoncms initialise`: Set up database and assets.
 - `pythoncms seed`: Reset default data.
+- `pythoncms deploy`: Generate production files (Dockerfile, docker-compose.yml).
 - `pythoncms --version`: Check your version.
+
+---
+
+## 🚀 Production Deployment
+
+Deploying your CMS is now a single command:
+
+```bash
+pythoncms deploy
+```
+
+This generates a production-ready `Dockerfile` and `docker-compose.yml`. You can deploy this directly to:
+- **Fly.io**: `fly launch`
+- **Railway**: Connect your repo
+- **VPS**: `docker-compose up -d --build`
+
+---
+
+## 📡 REST API
+
+Your content is automatically exposed via a JSON API.
+
+**Endpoint:** `/api/v1/<content_type_name>`
+
+### Pagination & Sorting
+- `?limit=10&offset=0`
+- `?sort_by=created_at&order=desc`
+
+### Authentication (Optional)
+Set `API_TOKEN` in your `.env` to secure the API.
+Requests must then include header: `Authorization: Bearer <API_TOKEN>`
 
 ---
 
