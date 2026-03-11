@@ -44,10 +44,18 @@ def start(name, run):
     try:
         current_dir = Path.cwd()
     except FileNotFoundError:
-        click.echo("Error: The current working directory does not exist. Please change to a valid directory.")
-        return
+        # Self-healing: if directory was deleted and recreated, try to recover from PWD env
+        pwd = os.environ.get("PWD")
+        if pwd and os.path.exists(pwd):
+            current_dir = Path(pwd)
+        else:
+            click.echo(
+                "Error: Your current directory has been deleted. Please 'cd' out and back in."
+            )
+            return
 
     dest = os.path.join(str(current_dir), name)
+
 
     if os.path.exists(dest):
         click.echo(f"Error: Directory {name} already exists.")
