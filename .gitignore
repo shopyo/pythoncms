@@ -126,3 +126,5 @@ shopyo/static/modules/
 
 # ignore secrets
 config.json
+
+exp/

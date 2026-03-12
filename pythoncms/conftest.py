@@ -102,10 +102,10 @@ def db(test_client, non_admin_user, admin_user, unconfirmed_user):
     _db.app = test_client
     _db.create_all()
 
-    # Insert admin, non admin, and unconfirmed
-    _db.session.add(non_admin_user)
-    _db.session.add(admin_user)
-    _db.session.add(unconfirmed_user)
+    # Insert admin, non admin, and unconfirmed if they don't exist
+    for u in [non_admin_user, admin_user, unconfirmed_user]:
+        if not User.query.filter_by(email=u.email).first():
+            _db.session.add(u)
 
     # add the default settings
     with open("config.json") as config:
@@ -118,7 +118,7 @@ def db(test_client, non_admin_user, admin_user, unconfirmed_user):
         else:
             existing.value = value
 
-    # Commit the changes for the users
+    # Commit the changes
     _db.session.commit()
 
     yield _db  # this is where the testing happens!
@@ -221,13 +221,13 @@ class AuthActions:
 
     def login(self, user, password="pass"):
         return self._client.post(
-            url_for("auth.login"),
+            url_for("shopyo_auth.login"),
             data=dict(email=user.email, password=password),
             follow_redirects=True,
         )
 
     def logout(self):
-        return self._client.get(url_for("auth.logout"), follow_redirects=True)
+        return self._client.get(url_for("shopyo_auth.logout"), follow_redirects=True)
 
 
 # Want TO USE THE BELOW 2 FIXTURES TO DYNAMICALLY
