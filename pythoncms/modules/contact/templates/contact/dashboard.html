@@ -3,57 +3,56 @@
 {% block title %}Contact Messages{% endblock %}
 
 {% block content %}
-<div class="space-y-8" x-data="{ selectedMessage: null, modalOpen: false }">
+<div class="space-y-6" x-data="{ selectedMessage: null, modalOpen: false }">
     <!-- Header -->
-    <div class="flex flex-col md:flex-row justify-between items-end md:items-center gap-4 border-b border-slate-100 dark:border-slate-800 pb-8">
+    <div class="flex flex-col md:flex-row justify-between items-center gap-4 pb-6 border-b border-slate-200 dark:border-slate-800">
         <div>
-            <h1 class="text-3xl font-black text-slate-900 dark:text-white tracking-tight uppercase">Contact Messages</h1>
-            <p class="text-slate-500 dark:text-slate-400 font-medium text-xs uppercase tracking-widest mt-1">Manage inquiries from your website</p>
+            <h1 class="text-2xl font-extrabold text-slate-900 dark:text-white tracking-tight">Contact Messages</h1>
+            <p class="text-slate-500 dark:text-slate-400 text-sm">Manage inquiries from your website visitors</p>
         </div>
     </div>
 
-    <!-- Table -->
-    <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl overflow-hidden shadow-sm">
-        <div class="overflow-x-auto">
-            <table class="w-full text-left border-collapse">
+    <!-- Table Container -->
+    <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl overflow-hidden shadow-sm">
+        <div class="overflow-x-auto p-4">
+            <table class="w-full text-left border-collapse border border-slate-200 dark:border-slate-700 rounded-lg overflow-hidden">
                 <thead>
-                    <tr class="bg-slate-50/50 dark:bg-slate-800/50 border-b border-slate-100 dark:border-slate-800">
-                        <th class="px-6 py-4 text-[10px] font-black text-slate-400 uppercase tracking-[0.2em]">Name</th>
-                        <th class="px-6 py-4 text-[10px] font-black text-slate-400 uppercase tracking-[0.2em]">Email</th>
-                        <th class="px-6 py-4 text-[10px] font-black text-slate-400 uppercase tracking-[0.2em]">Date</th>
-                        <th class="px-6 py-4 text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] text-right">Actions</th>
+                    <tr class="bg-slate-100 dark:bg-slate-800 text-[11px] font-bold text-slate-600 dark:text-slate-300 uppercase tracking-wider">
+                        <th class="px-6 py-4 border border-slate-200 dark:border-slate-700">Sender</th>
+                        <th class="px-6 py-4 border border-slate-200 dark:border-slate-700">Email Address</th>
+                        <th class="px-6 py-4 border border-slate-200 dark:border-slate-700">Received On</th>
+                        <th class="px-6 py-4 border border-slate-200 dark:border-slate-700 text-right">Actions</th>
                     </tr>
                 </thead>
-                <tbody class="divide-y divide-slate-100 dark:divide-slate-800">
+                <tbody class="divide-y divide-slate-200 dark:divide-slate-700 text-sm">
                     {% for message in messages.items %}
-                    <tr class="hover:bg-slate-50/50 dark:hover:bg-slate-800/30 transition-colors group">
-                        <td class="px-6 py-4">
-                            <span class="text-xs font-bold text-slate-900 dark:text-white">{{ message.name }}</span>
+                    <tr class="hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
+                        <td class="px-6 py-4 border border-slate-200 dark:border-slate-700 font-semibold text-slate-900 dark:text-white">
+                            {{ message.name }}
                         </td>
-                        <td class="px-6 py-4 text-xs text-slate-500 dark:text-slate-400">
+                        <td class="px-6 py-4 border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-400">
                             {{ message.email }}
                         </td>
-                        <td class="px-6 py-4 text-[10px] font-bold text-slate-400 uppercase tracking-wider">
-                            {{ message.created_date.strftime('%Y-%m-%d %H:%M') if message.created_date else '' }}
+                        <td class="px-6 py-4 border border-slate-200 dark:border-slate-700 text-slate-500 dark:text-slate-500 tabular-nums">
+                            {{ message.created_date.strftime('%Y-%m-%d %H:%M') if message.created_date else '-' }}
                         </td>
-                        <td class="px-6 py-4 text-right">
+                        <td class="px-6 py-4 border border-slate-200 dark:border-slate-700 text-right">
                             <button 
-                                @click="selectedMessage = { name: '{{ message.name }}', email: '{{ message.email }}', content: `{{ message.message | replace('\n', '<br>') | safe }}` }; modalOpen = true"
-                                class="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-primary/10 text-primary hover:bg-primary hover:text-white text-[10px] font-black uppercase tracking-widest transition-all">
-                                <i class="fas fa-eye"></i>
-                                View
+                                @click="selectedMessage = { name: {{ message.name|tojson }}, email: {{ message.email|tojson }}, content: {{ message.message|tojson }} }; modalOpen = true"
+                                class="inline-flex items-center px-3 py-1.5 rounded-lg bg-indigo-600 text-white hover:bg-indigo-700 transition-all font-bold text-xs shadow-sm">
+                                <i class="fas fa-envelope-open-text mr-2"></i>
+                                View Message
                             </button>
                         </td>
                     </tr>
                     {% endfor %}
+                    
                     {% if not messages.items %}
                     <tr>
-                        <td colspan="4" class="px-6 py-12 text-center">
-                            <div class="flex flex-col items-center">
-                                <div class="w-12 h-12 rounded-2xl bg-slate-50 dark:bg-slate-800 flex items-center justify-center text-slate-300 dark:text-slate-600 text-xl mb-4">
-                                    <i class="fas fa-inbox"></i>
-                                </div>
-                                <p class="text-xs font-bold text-slate-400 uppercase tracking-widest">No messages found</p>
+                        <td colspan="4" class="px-6 py-16 text-center text-slate-400">
+                            <div class="flex flex-col items-center gap-2">
+                                <i class="fas fa-inbox text-3xl opacity-20"></i>
+                                <p class="font-medium">No messages found in your inbox</p>
                             </div>
                         </td>
                     </tr>
@@ -64,74 +63,44 @@
         
         <!-- Pagination -->
         {% if messages.pages > 1 %}
-        <div class="px-6 py-4 bg-slate-50/50 dark:bg-slate-800/50 border-t border-slate-100 dark:border-slate-800 flex justify-between items-center">
-            <div class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">
-                Page {{ messages.page }} of {{ messages.pages }}
-            </div>
+        <div class="px-6 py-4 bg-slate-50 dark:bg-slate-800/30 border-t border-slate-200 dark:border-slate-800 flex items-center justify-between">
+            <span class="text-xs text-slate-500 font-medium">Page {{ messages.page }} of {{ messages.pages }}</span>
             <div class="flex gap-2">
                 {% if messages.has_prev %}
-                <a href="{{ url_for('contact.dashboard', page=messages.prev_num) }}" class="px-3 py-1 rounded-lg border border-slate-200 dark:border-slate-700 text-[10px] font-black uppercase tracking-widest hover:bg-white dark:hover:bg-slate-900 transition-all text-slate-600 dark:text-slate-300">Prev</a>
+                <a href="{{ url_for('contact.dashboard', page=messages.prev_num) }}" class="px-3 py-1 rounded-md border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-xs font-bold text-slate-600 dark:text-slate-300 hover:bg-slate-50">Previous</a>
                 {% endif %}
                 {% if messages.has_next %}
-                <a href="{{ url_for('contact.dashboard', page=messages.next_num) }}" class="px-3 py-1 rounded-lg border border-slate-200 dark:border-slate-700 text-[10px] font-black uppercase tracking-widest hover:bg-white dark:hover:bg-slate-900 transition-all text-slate-600 dark:text-slate-300">Next</a>
+                <a href="{{ url_for('contact.dashboard', page=messages.next_num) }}" class="px-3 py-1 rounded-md border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-xs font-bold text-slate-600 dark:text-slate-300 hover:bg-slate-50">Next</a>
                 {% endif %}
             </div>
         </div>
         {% endif %}
     </div>
 
-    <!-- Alpine Modal -->
-    <div 
-        x-show="modalOpen" 
-        class="fixed inset-0 z-50 overflow-y-auto"
-        x-cloak
-    >
-        <div class="flex items-center justify-center min-h-screen px-4 pt-4 pb-20 text-center sm:block sm:p-0">
-            <!-- Overlay -->
-            <div 
-                x-show="modalOpen"
-                x-transition:enter="ease-out duration-300"
-                x-transition:enter-start="opacity-0"
-                x-transition:enter-end="opacity-100"
-                x-transition:leave="ease-in duration-200"
-                x-transition:leave-start="opacity-100"
-                x-transition:leave-end="opacity-0"
-                @click="modalOpen = false"
-                class="fixed inset-0 transition-opacity bg-slate-950/60 backdrop-blur-sm"
-            ></div>
-
-            <!-- Modal Panel -->
-            <div 
-                x-show="modalOpen"
-                x-transition:enter="ease-out duration-300"
-                x-transition:enter-start="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
-                x-transition:enter-end="opacity-100 translate-y-0 sm:scale-100"
-                x-transition:leave="ease-in duration-200"
-                x-transition:leave-start="opacity-100 translate-y-0 sm:scale-100"
-                x-transition:leave-end="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
-                class="inline-block w-full max-w-xl p-8 my-8 overflow-hidden text-left align-middle transition-all transform bg-white dark:bg-slate-900 shadow-2xl rounded-3xl border border-slate-100 dark:border-slate-800"
-            >
-                <div class="flex justify-between items-start mb-6">
+    <!-- Modal -->
+    <template x-if="modalOpen">
+        <div class="fixed inset-0 z-50 flex items-center justify-center p-4">
+            <div class="absolute inset-0 bg-slate-900/60 backdrop-blur-sm" @click="modalOpen = false"></div>
+            <div class="relative bg-white dark:bg-slate-900 w-full max-w-lg rounded-2xl shadow-2xl overflow-hidden border border-slate-200 dark:border-slate-800 animate-in zoom-in duration-200">
+                <div class="p-6 border-b border-slate-100 dark:border-slate-800 flex justify-between items-start">
                     <div>
-                        <h3 class="text-xl font-black text-slate-900 dark:text-white uppercase tracking-tight" x-text="selectedMessage?.name"></h3>
-                        <p class="text-[10px] font-bold text-primary uppercase tracking-widest mt-1" x-text="selectedMessage?.email"></p>
+                        <h3 class="text-lg font-bold text-slate-900 dark:text-white" x-text="selectedMessage.name"></h3>
+                        <p class="text-xs text-indigo-600 dark:text-indigo-400 font-medium" x-text="selectedMessage.email"></p>
                     </div>
-                    <button @click="modalOpen = false" class="text-slate-400 hover:text-slate-600 dark:hover:text-white transition-colors">
+                    <button @click="modalOpen = false" class="text-slate-400 hover:text-slate-600 dark:hover:text-white">
                         <i class="fas fa-times"></i>
                     </button>
                 </div>
-                
-                <div class="bg-slate-50 dark:bg-slate-800/50 rounded-2xl p-6 border border-slate-100 dark:border-slate-700/50">
-                    <div class="text-sm text-slate-600 dark:text-slate-300 leading-relaxed whitespace-pre-wrap" x-html="selectedMessage?.content"></div>
+                <div class="p-6 bg-slate-50/50 dark:bg-slate-800/20">
+                    <div class="text-sm text-slate-700 dark:text-slate-300 whitespace-pre-wrap leading-relaxed" x-text="selectedMessage.content"></div>
                 </div>
-
-                <div class="mt-8 flex justify-end">
-                    <button @click="modalOpen = false" class="px-6 py-3 rounded-2xl bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 text-[10px] font-black uppercase tracking-[0.2em] hover:bg-slate-200 dark:hover:bg-slate-700 transition-all">
+                <div class="p-4 bg-slate-50 dark:bg-slate-800/50 flex justify-end">
+                    <button @click="modalOpen = false" class="px-4 py-2 rounded-lg bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-xs font-bold text-slate-600 dark:text-slate-300 shadow-sm hover:bg-slate-50 transition-all">
                         Close
                     </button>
                 </div>
             </div>
         </div>
-    </div>
+    </template>
 </div>
 {% endblock %}
