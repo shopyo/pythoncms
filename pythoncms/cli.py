@@ -41,7 +41,9 @@ def cli():
 @click.option("--run", is_flag=True, help="Initialize and run the server immediately")
 def start(name, run):
     """Create a new pythoncms project"""
-    dest = os.path.abspath(name)
+    # Use PWD environment variable if available to handle deleted CWD
+    base_dir = os.environ.get("PWD") or os.getcwd()
+    dest = os.path.join(base_dir, name)
 
     if os.path.exists(dest):
         click.echo(f"Error: Directory {name} already exists.")
