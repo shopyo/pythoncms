@@ -315,18 +315,19 @@ def setup_theme_paths(app):
 def inject_global_vars(app, global_template_variables):
     @app.context_processor
     def inject_global_vars():
-        APP_NAME = os.environ.get('APP_NAME', 'Demo')
+        import datetime
+        from flask_login import current_user
+        from shopyo.api.assets import get_static
+        from shopyo_theme.helpers import get_active_front_theme, get_active_back_theme
+        
+        APP_NAME = os.environ.get('APP_NAME', 'PythonCMS')
         def get_setting(env_var):
             return os.environ.get(env_var)
-        
-        from shopyo_theme.helpers import get_active_front_theme, get_active_back_theme
         
         def get_url_prefix(parts=None, as_str=False):
             from flask import request
             prefix = "/" + request.path.split("/")[1]
             if parts == 1 and as_str:
-                # This is a bit of a hack to match the template usage
-                # which expects something like /contact/dashboard
                 return request.path
             return prefix
 
@@ -351,6 +352,8 @@ def inject_global_vars(app, global_template_variables):
 
         base_context = {
             "APP_NAME": APP_NAME,
+            "OUR_APP_NAME": APP_NAME,
+            "current_year": datetime.datetime.now().year,
             "len": len,
             "current_user": current_user,
             "get_static": get_static,

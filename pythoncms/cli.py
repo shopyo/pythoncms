@@ -77,7 +77,7 @@ def start(name, run):
     
     env_content = f"""ACTIVE_FRONT_THEME = 'editorial'
 ACTIVE_BACK_THEME = 'sneat'
-APP_NAME = 'Demo'
+APP_NAME = 'PythonCMS'
 ACTIVE_ICONSET = 'boxicons'
 SITE_TITLE = 'Site title'
 SITE_DESCRIPTION = 'Site title'
