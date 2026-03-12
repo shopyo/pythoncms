@@ -161,9 +161,28 @@ COPY . .
 CMD ["gunicorn", "--bind", "0.0.0.0:8000", "--workers", "4", "pythoncms.app:create_app('production')"]
 """
 
-    nginx_content = """server {
+    nginx_content = """# Hardened Nginx Config for PythonCMS
+server {
     listen 80;
-    server_name localhost;
+    server_name localhost; # Replace with your domain
+
+    # Security Headers
+    add_header X-Frame-Options "SAMEORIGIN";
+    add_header X-XSS-Protection "1; mode=block";
+    add_header X-Content-Type-Options "nosniff";
+    add_header Referrer-Policy "no-referrer-when-downgrade";
+    add_header Content-Security-Policy "default-src 'self' http: https: data: blob: 'unsafe-inline';";
+
+    # Gzip Compression
+    gzip on;
+    gzip_vary on;
+    gzip_min_length 10240;
+    gzip_proxied expired no-cache no-store private auth;
+    gzip_types text/plain text/css text/xml text/javascript application/x-javascript application/xml;
+    gzip_disable "MSIE [1-6]\\.";
+
+    # Max upload size
+    client_max_body_size 20M;
 
     location / {
         proxy_pass http://web:8000;
@@ -171,6 +190,12 @@ CMD ["gunicorn", "--bind", "0.0.0.0:8000", "--workers", "4", "pythoncms.app:crea
         proxy_set_header X-Real-IP $remote_addr;
         proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
         proxy_set_header X-Forwarded-Proto $scheme;
+        
+        # Proxy timeouts
+        proxy_connect_timeout 600;
+        proxy_send_timeout 600;
+        proxy_read_timeout 600;
+        send_timeout 600;
     }
 
     location /static/ {
