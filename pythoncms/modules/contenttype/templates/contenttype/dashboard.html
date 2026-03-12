@@ -1,56 +1,75 @@
 {% extends 'shopyo_dashboard/dashboard_base.html' %}
 
-{% block content %}
-<div class="container-xxl flex-grow-1 container-p-y">
-    <h4 class="fw-bold py-3 mb-4"><span class="text-muted fw-light">Content /</span> Manage Types</h4>
+{% block title %}Manage Content Types{% endblock %}
 
-    <div class="card">
-        <div class="card-header d-flex justify-content-between align-items-center">
-            <h5 class="mb-0">Content Types</h5>
-            <a href="{{ url_for('contenttype.create') }}" class="btn btn-primary">Create New Type</a>
+{% block content %}
+<div class="space-y-8">
+    <!-- Header -->
+    <div class="flex flex-col md:flex-row justify-between items-end md:items-center gap-4 border-b border-slate-100 dark:border-slate-800 pb-8">
+        <div>
+            <h1 class="text-3xl font-black text-slate-900 dark:text-white tracking-tight uppercase">Content Types</h1>
+            <p class="text-slate-500 dark:text-slate-400 font-medium text-xs uppercase tracking-widest mt-1">Define and manage your data structures</p>
         </div>
-        <div class="table-responsive text-nowrap">
-            <table class="table">
+        <a href="{{ url_for('contenttype.create') }}" class="inline-flex items-center gap-2 px-6 py-3 rounded-2xl bg-primary text-white hover:bg-primary-dark shadow-xl shadow-primary/20 transition-all text-xs font-black uppercase tracking-widest">
+            <i class="fas fa-plus"></i>
+            Create New Type
+        </a>
+    </div>
+
+    <!-- Content Types Grid/Table -->
+    <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl overflow-hidden shadow-sm">
+        <div class="overflow-x-auto">
+            <table class="w-full text-left border-collapse">
                 <thead>
-                    <tr>
-                        <th>Name</th>
-                        <th>Description</th>
-                        <th>Fields</th>
-                        <th>Actions</th>
+                    <tr class="bg-slate-50/50 dark:bg-slate-800/50 border-b border-slate-100 dark:border-slate-800">
+                        <th class="px-6 py-4 text-[10px] font-black text-slate-400 uppercase tracking-[0.2em]">Name</th>
+                        <th class="px-6 py-4 text-[10px] font-black text-slate-400 uppercase tracking-[0.2em]">Description</th>
+                        <th class="px-6 py-4 text-[10px] font-black text-slate-400 uppercase tracking-[0.2em]">Schema</th>
+                        <th class="px-6 py-4 text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] text-right">Actions</th>
                     </tr>
                 </thead>
-                <tbody class="table-border-bottom-0">
+                <tbody class="divide-y divide-slate-100 dark:divide-slate-800">
                     {% for ct in content_types %}
-                    <tr>
-                        <td><strong>{{ ct.name }}</strong></td>
-                        <td>{{ ct.description }}</td>
-                        <td>
-                            {% for field in ct.schema %}
-                            <span class="badge bg-label-info me-1">{{ field.name }} ({{ field.type }})</span>
-                            {% endfor %}
+                    <tr class="hover:bg-slate-50/50 dark:hover:bg-slate-800/30 transition-colors group">
+                        <td class="px-6 py-4">
+                            <span class="text-xs font-bold text-slate-900 dark:text-white uppercase tracking-tight">{{ ct.name }}</span>
                         </td>
-                        <td>
-                            <div class="dropdown">
-                                <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
-                                    <i class="bx bx-dots-vertical-rounded"></i>
-                                </button>
-                                <div class="dropdown-menu">
-                                    <a class="dropdown-item" href="{{ url_for('contenttype.items', type_id=ct.id) }}">
-                                        <i class="bx bx-list-ul me-1"></i> View Items
-                                    </a>
-                                    <a class="dropdown-item" href="{{ url_for('contenttype.item_add', type_id=ct.id) }}">
-                                        <i class="bx bx-plus me-1"></i> Add Item
-                                    </a>
-                                    <a class="dropdown-item text-danger" href="{{ url_for('contenttype.delete_type', type_id=ct.id) }}" onclick="return confirm('Are you sure?')">
-                                        <i class="bx bx-trash me-1"></i> Delete Type
-                                    </a>
-                                </div>
+                        <td class="px-6 py-4 text-xs text-slate-500 dark:text-slate-400">
+                            {{ ct.description or 'No description' }}
+                        </td>
+                        <td class="px-6 py-4">
+                            <div class="flex flex-wrap gap-1">
+                                {% for field in ct.schema %}
+                                <span class="px-2 py-0.5 rounded-md bg-slate-100 dark:bg-slate-800 text-[9px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-tighter">
+                                    {{ field.name }}
+                                </span>
+                                {% endfor %}
+                            </div>
+                        </td>
+                        <td class="px-6 py-4 text-right">
+                            <div class="flex justify-end gap-2">
+                                <a href="{{ url_for('contenttype.items', type_id=ct.id) }}" class="p-2 rounded-lg bg-blue-50 dark:bg-blue-900/20 text-blue-600 hover:bg-blue-600 hover:text-white transition-all shadow-inner border border-blue-100/50 dark:border-blue-800/50" title="View Items">
+                                    <i class="fas fa-list-ul text-[10px]"></i>
+                                </a>
+                                <a href="{{ url_for('contenttype.item_add', type_id=ct.id) }}" class="p-2 rounded-lg bg-emerald-50 dark:bg-emerald-900/20 text-emerald-600 hover:bg-emerald-600 hover:text-white transition-all shadow-inner border border-emerald-100/50 dark:border-emerald-800/50" title="Add Item">
+                                    <i class="fas fa-plus text-[10px]"></i>
+                                </a>
+                                <a href="{{ url_for('contenttype.delete_type', type_id=ct.id) }}" class="p-2 rounded-lg bg-rose-50 dark:bg-rose-900/20 text-rose-600 hover:bg-rose-600 hover:text-white transition-all shadow-inner border border-rose-100/50 dark:border-rose-800/50" onclick="return confirm('Delete this content type and all its items?')" title="Delete">
+                                    <i class="fas fa-trash-alt text-[10px]"></i>
+                                </a>
                             </div>
                         </td>
                     </tr>
                     {% else %}
                     <tr>
-                        <td colspan="4" class="text-center">No content types defined yet.</td>
+                        <td colspan="4" class="px-6 py-12 text-center">
+                            <div class="flex flex-col items-center">
+                                <div class="w-12 h-12 rounded-2xl bg-slate-50 dark:bg-slate-800 flex items-center justify-center text-slate-300 dark:text-slate-600 text-xl mb-4">
+                                    <i class="fas fa-layer-group"></i>
+                                </div>
+                                <p class="text-xs font-bold text-slate-400 uppercase tracking-widest">No content types defined yet</p>
+                            </div>
+                        </td>
                     </tr>
                     {% endfor %}
                 </tbody>
