@@ -2,10 +2,7 @@
     "display_string": "Files",
     "module_name": "resource",
     "type": "hide",
-    "icons":{
-		"fa": "fa fa-envelope",
-		"boxicons": ""
-	},
+    "fa-icon": "fa fa-envelope",
     "url_prefix": "/resource",
     "author": {
         "name": "",
