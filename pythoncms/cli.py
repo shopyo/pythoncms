@@ -134,7 +134,7 @@ def run(debug, port, host):
 
 @cli.command("deploy")
 def deploy():
-    """Generate production deployment files"""
+    """Generate production deployment files (Docker + Nginx)"""
     
     dockerfile_content = """FROM python:3.11-slim
 
@@ -144,9 +144,9 @@ ENV PYTHONDONTWRITEBYTECODE 1
 ENV PYTHONUNBUFFERED 1
 ENV FLASK_APP=pythoncms.app:create_app
 
-RUN apt-get update && apt-get install -y --no-install-recommends \
-    gcc \
-    libpq-dev \
+RUN apt-get update && apt-get install -y --no-install-recommends \\
+    gcc \\
+    libpq-dev \\
     && rm -rf /var/lib/apt/lists/*
 
 COPY requirements.txt .
@@ -155,18 +155,30 @@ RUN pip install gunicorn
 
 COPY . .
 
-CMD ["gunicorn", "--bind", "0.0.0.0:8000", "pythoncms.app:create_app('production')"]
+# Ensure static files are collected if needed
+# RUN flask shopyo-collectstatic
+
+CMD ["gunicorn", "--bind", "0.0.0.0:8000", "--workers", "4", "pythoncms.app:create_app('production')"]
 """
 
-    dockerignore_content = """__pycache__
-*.pyc
-*.pyo
-*.pyd
-.Python
-env/
-venv/
-.env
-.DS_Store
+    nginx_content = """server {
+    listen 80;
+    server_name localhost;
+
+    location / {
+        proxy_pass http://web:8000;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+    }
+
+    location /static/ {
+        alias /app/pythoncms/static/;
+        expires 30d;
+        add_header Cache-Control "public, no-transform";
+    }
+}
 """
 
     docker_compose_content = """version: '3.8'
@@ -174,21 +186,37 @@ venv/
 services:
   web:
     build: .
-    command: gunicorn --bind 0.0.0.0:8000 "pythoncms.app:create_app('production')"
     volumes:
       - .:/app
-    ports:
-      - "8000:8000"
+      - static_volume:/app/pythoncms/static
     env_file:
       - .env
     environment:
       - FLASK_ENV=production
+
+  nginx:
+    image: nginx:alpine
+    restart: always
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx.conf:/etc/nginx/conf.d/default.conf:ro
+      - static_volume:/app/pythoncms/static:ro
+    depends_on:
+      - web
+
+volumes:
+  static_volume:
 """
 
     trymkfile("Dockerfile", dockerfile_content)
-    trymkfile(".dockerignore", dockerignore_content)
+    trymkfile("nginx.conf", nginx_content)
     trymkfile("docker-compose.yml", docker_compose_content)
+    trymkfile(".dockerignore", "__pycache__\\n*.pyc\\n.env\\nvenv/\\ninstance/\\n")
     
-    click.echo("🚀 Deployment files generated!")
-    click.echo("Run 'docker-compose up --build' to test locally.")
-    click.echo("Or deploy the Dockerfile to any cloud provider (Fly.io, Railway, etc).")
+    click.echo("🚀 Production deployment files generated!")
+    click.echo("Included: Dockerfile, nginx.conf, docker-compose.yml")
+    click.echo("")
+    click.echo("To deploy:")
+    click.echo("1. Edit 'nginx.conf' to set your real domain name.")
+    click.echo("2. Run 'docker-compose up --build -d'")

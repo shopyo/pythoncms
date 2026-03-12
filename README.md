@@ -40,16 +40,23 @@ Manage your entire project from one place:
 
 ## 🚀 Production Deployment
 
-Deploying your CMS is now a single command:
+Deploying your CMS with a production-grade Nginx reverse proxy is now a single command:
 
 ```bash
 pythoncms deploy
 ```
 
-This generates a production-ready `Dockerfile` and `docker-compose.yml`. You can deploy this directly to:
-- **Fly.io**: `fly launch`
-- **Railway**: Connect your repo
-- **VPS**: `docker-compose up -d --build`
+This generates:
+- **Dockerfile**: Optimized for Gunicorn performance.
+- **nginx.conf**: Configured for request buffering and fast static file serving.
+- **docker-compose.yml**: Orchestrates the app and Nginx containers.
+
+### Quick Start
+1. Run `pythoncms deploy`.
+2. (Optional) Edit `nginx.conf` to add your domain.
+3. Run `docker-compose up --build -d`.
+
+Your site will be live on port 80 with Nginx handling all incoming traffic.
 
 ---
 
