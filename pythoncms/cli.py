@@ -15,6 +15,7 @@ Example command 'welcome' has been added.
 """
 import os
 import secrets
+import shutil
 import subprocess
 import sys
 from pathlib import Path
@@ -41,20 +42,31 @@ def cli():
 @click.option("--run", is_flag=True, help="Initialize and run the server immediately")
 def start(name, run):
     """Create a new pythoncms project"""
-    # Use PWD environment variable if available to handle deleted CWD
-    base_dir = os.environ.get("PWD") or os.getcwd()
-    dest = os.path.join(base_dir, name)
+    # Bulletproof path resolution
+    try:
+        dest = os.path.abspath(name)
+    except FileNotFoundError:
+        # Fallback for deleted CWD
+        base_dir = os.environ.get("PWD") or os.getcwd()
+        dest = os.path.join(base_dir, name)
+    
+    click.echo(f"📂  Creating project at: {dest}")
 
     if os.path.exists(dest):
-        click.echo(f"Error: Directory {name} already exists.")
+        click.echo(f"❌ Error: Directory already exists at {dest}")
         return
 
+    # Ensure parent directory exists
+    os.makedirs(os.path.dirname(dest), exist_ok=True)
 
     # Copy the project structure
-    trycopytree(str(path.parent.absolute()), dest)
-    
-    # Cleanup target
-    tryrmfile(os.path.join(dest, "cli.py"))
+    source_dir = str(path.parent.absolute())
+    try:
+        shutil.copytree(source_dir, dest, ignore=shutil.ignore_patterns('__pycache__', 'cli.py', '*.db', 'instance'))
+        click.echo(f"✅ Scaffolding complete in {dest}")
+    except Exception as e:
+        click.echo(f"❌ Error during scaffolding: {e}")
+        return
     
     # Create requirements.txt
     reqs = f"pythoncms=={__version__}"
