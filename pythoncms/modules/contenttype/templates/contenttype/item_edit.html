@@ -1,68 +1,93 @@
 {% extends 'shopyo_dashboard/dashboard_base.html' %}
 
-{% block content %}
-<div class="container-xxl flex-grow-1 container-p-y">
-    <h4 class="fw-bold py-3 mb-4">
-        <span class="text-muted fw-light">Content / {{ content_type.name }} /</span> 
-        {% if item %}Edit{% else %}Add{% endif %} Item
-    </h4>
+{% block title %}{% if item %}Edit{% else %}New{% endif %} {{ content_type.name }}{% endblock %}
 
-    <div class="row">
-        <div class="col-xl">
-            <div class="card mb-4">
-                <div class="card-header d-flex justify-content-between align-items-center">
-                    <h5 class="mb-0">{% if item %}Edit{% else %}New{% endif %} {{ content_type.name }}</h5>
-                </div>
-                <div class="card-body">
-                    <form method="POST">
-                        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
-                        
-                        {% for field in content_type.schema %}
-                        <div class="mb-3">
-                            <label class="form-label" for="{{ field.name }}">{{ field.name|capitalize }}</label>
-                            
-                            {% if field.type == 'text' %}
-                            <input type="text" class="form-control" id="{{ field.name }}" name="{{ field.name }}" 
-                                   value="{{ item.data.get(field.name, '') if item else '' }}" required />
-                                   
-                            {% elif field.type == 'textarea' %}
-                            <textarea id="{{ field.name }}" name="{{ field.name }}" class="form-control" rows="5" required>{{ item.data.get(field.name, '') if item else '' }}</textarea>
-                            
-                            {% elif field.type == 'richtext' %}
-                            <textarea id="{{ field.name }}" name="{{ field.name }}" class="form-control richtext" rows="10">{{ item.data.get(field.name, '') if item else '' }}</textarea>
-                            
-                            {% elif field.type == 'image' %}
-                            <div class="input-group">
-                                <span class="input-group-text"><i class="bx bx-image"></i></span>
-                                <input type="text" class="form-control image-input" id="{{ field.name }}" name="{{ field.name }}" 
-                                       placeholder="https://..." value="{{ item.data.get(field.name, '') if item else '' }}" />
-                            </div>
-                            <div class="mt-2 image-preview-container" id="preview-{{ field.name }}">
-                                {% if item and item.data.get(field.name) %}
-                                <img src="{{ item.data.get(field.name) }}" class="img-thumbnail" style="max-height: 200px;">
-                                {% endif %}
-                            </div>
-                            
-                            {% elif field.type == 'number' %}
-                            <input type="number" class="form-control" id="{{ field.name }}" name="{{ field.name }}" 
-                                   value="{{ item.data.get(field.name, '') if item else '' }}" required />
-                                   
-                            {% elif field.type == 'date' %}
-                            <input type="date" class="form-control" id="{{ field.name }}" name="{{ field.name }}" 
-                                   value="{{ item.data.get(field.name, '') if item else '' }}" required />
-                            {% endif %}
-                        </div>
-                        {% endfor %}
-                        
-                        <div class="mt-4">
-                            <button type="submit" class="btn btn-primary">Save Item</button>
-                            <a href="{{ url_for('contenttype.items', type_id=content_type.id) }}" class="btn btn-outline-secondary">Cancel</a>
-                        </div>
-                    </form>
-                </div>
+{% block content %}
+<div class="max-w-4xl mx-auto space-y-8">
+    <!-- Header -->
+    <div class="flex items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-8">
+        <div>
+            <div class="flex items-center gap-3 mb-1">
+                <a href="{{ url_for('contenttype.dashboard') }}" class="text-[10px] font-black text-primary uppercase tracking-[0.2em] hover:opacity-70 transition-opacity">Content</a>
+                <i class="fas fa-chevron-right text-[8px] text-slate-300"></i>
+                <a href="{{ url_for('contenttype.items', type_id=content_type.id) }}" class="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] hover:text-primary transition-colors">{{ content_type.name }}</a>
             </div>
+            <h1 class="text-3xl font-black text-slate-900 dark:text-white tracking-tight uppercase">{% if item %}Edit{% else %}New{% endif %} Item</h1>
         </div>
     </div>
+
+    <!-- Form -->
+    <form method="POST" class="space-y-8">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+        
+        <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl p-8 shadow-sm space-y-8">
+            {% for field in content_type.schema %}
+            <div class="space-y-2">
+                <label class="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em]" for="{{ field.name }}">
+                    {{ field.name|capitalize }}
+                </label>
+                
+                {% if field.type == 'text' %}
+                <input type="text" id="{{ field.name }}" name="{{ field.name }}" 
+                       value="{{ item.data.get(field.name, '') if item else '' }}" required 
+                       class="w-full bg-slate-50 dark:bg-slate-800/50 border border-slate-100 dark:border-slate-700/50 rounded-2xl py-4 px-6 text-sm focus:ring-4 focus:ring-primary/10 focus:border-primary transition-all outline-none font-bold text-slate-900 dark:text-white">
+                       
+                {% elif field.type == 'textarea' %}
+                <textarea id="{{ field.name }}" name="{{ field.name }}" rows="5" required
+                          class="w-full bg-slate-50 dark:bg-slate-800/50 border border-slate-100 dark:border-slate-700/50 rounded-2xl py-4 px-6 text-sm focus:ring-4 focus:ring-primary/10 focus:border-primary transition-all outline-none text-slate-600 dark:text-slate-300">{{ item.data.get(field.name, '') if item else '' }}</textarea>
+                
+                {% elif field.type == 'richtext' %}
+                <div class="rounded-2xl overflow-hidden border border-slate-100 dark:border-slate-700/50">
+                    <textarea id="{{ field.name }}" name="{{ field.name }}" class="richtext">{{ item.data.get(field.name, '') if item else '' }}</textarea>
+                </div>
+                
+                {% elif field.type == 'image' %}
+                <div class="space-y-4">
+                    <div class="flex gap-2">
+                        <div class="flex-1 relative group">
+                            <i class="fas fa-link absolute left-5 top-1/2 -translate-y-1/2 text-slate-400 text-xs transition-colors group-focus-within:text-primary"></i>
+                            <input type="text" class="image-input w-full bg-slate-50 dark:bg-slate-800/50 border border-slate-100 dark:border-slate-700/50 rounded-2xl py-4 pl-12 pr-6 text-sm focus:ring-4 focus:ring-primary/10 focus:border-primary transition-all outline-none text-slate-600 dark:text-slate-300" 
+                                   id="{{ field.name }}" name="{{ field.name }}" 
+                                   placeholder="Enter image URL..." value="{{ item.data.get(field.name, '') if item else '' }}" />
+                        </div>
+                    </div>
+                    <div class="image-preview-container flex justify-center p-4 bg-slate-50 dark:bg-slate-800/30 rounded-2xl border-2 border-dashed border-slate-100 dark:border-slate-800" id="preview-{{ field.name }}">
+                        {% if item and item.data.get(field.name) %}
+                        <img src="{{ item.data.get(field.name) }}" class="max-h-64 rounded-xl shadow-lg border border-white dark:border-slate-700">
+                        {% else %}
+                        <div class="flex flex-col items-center py-8 text-slate-300 dark:text-slate-600">
+                            <i class="fas fa-image text-4xl mb-2"></i>
+                            <p class="text-[10px] font-black uppercase tracking-widest">Image Preview</p>
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+                
+                {% elif field.type == 'number' %}
+                <input type="number" id="{{ field.name }}" name="{{ field.name }}" 
+                       value="{{ item.data.get(field.name, '') if item else '' }}" required 
+                       class="w-full bg-slate-50 dark:bg-slate-800/50 border border-slate-100 dark:border-slate-700/50 rounded-2xl py-4 px-6 text-sm focus:ring-4 focus:ring-primary/10 focus:border-primary transition-all outline-none font-bold text-slate-900 dark:text-white">
+                       
+                {% elif field.type == 'date' %}
+                <input type="date" id="{{ field.name }}" name="{{ field.name }}" 
+                       value="{{ item.data.get(field.name, '') if item else '' }}" required 
+                       class="w-full bg-slate-50 dark:bg-slate-800/50 border border-slate-100 dark:border-slate-700/50 rounded-2xl py-4 px-6 text-sm focus:ring-4 focus:ring-primary/10 focus:border-primary transition-all outline-none font-bold text-slate-900 dark:text-white">
+                {% endif %}
+            </div>
+            {% endfor %}
+        </div>
+
+        <!-- Actions -->
+        <div class="flex items-center gap-4 pt-4">
+            <button type="submit" class="inline-flex items-center gap-2 px-10 py-4 rounded-2xl bg-primary text-white hover:bg-primary-dark shadow-2xl shadow-primary/20 transition-all text-xs font-black uppercase tracking-widest">
+                <i class="fas fa-save"></i>
+                Save Item
+            </button>
+            <a href="{{ url_for('contenttype.items', type_id=content_type.id) }}" class="px-8 py-4 rounded-2xl bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 text-xs font-black uppercase tracking-widest hover:bg-slate-200 dark:hover:bg-slate-700 transition-all">
+                Cancel
+            </a>
+        </div>
+    </form>
 </div>
 
 <script src="https://cdn.tiny.cloud/1/no-api-key/tinymce/6/tinymce.min.js" referrerpolicy="origin"></script>
@@ -71,7 +96,9 @@
         selector: '.richtext',
         plugins: 'anchor autolink charmap codesample emoticons image link lists media searchreplace table visualblocks wordcount',
         toolbar: 'undo redo | blocks fontfamily fontsize | bold italic underline strikethrough | link image media table | align lineheight | numlist bullist indent outdent | emoticons charmap | removeformat',
-        height: 500
+        height: 500,
+        skin: (window.matchMedia('(prefers-color-scheme: dark)').matches || document.documentElement.classList.contains('dark')) ? 'oxide-dark' : 'oxide',
+        content_css: (window.matchMedia('(prefers-color-scheme: dark)').matches || document.documentElement.classList.contains('dark')) ? 'dark' : 'default',
     });
     
     // Simple Image Preview
@@ -80,9 +107,9 @@
             const previewId = 'preview-' + this.id;
             const container = document.getElementById(previewId);
             if (this.value) {
-                container.innerHTML = `<img src="${this.value}" class="img-thumbnail" style="max-height: 200px;" onerror="this.style.display='none'">`;
+                container.innerHTML = `<img src="${this.value}" class="max-h-64 rounded-xl shadow-lg border border-white dark:border-slate-700" onerror="this.parentElement.innerHTML='<div class=\'flex flex-col items-center py-8 text-rose-300\'><i class=\'fas fa-exclamation-triangle text-4xl mb-2\'></i><p class=\'text-[10px] font-black uppercase tracking-widest\'>Invalid Image URL</p></div>'">`;
             } else {
-                container.innerHTML = '';
+                container.innerHTML = `<div class="flex flex-col items-center py-8 text-slate-300 dark:text-slate-600"><i class="fas fa-image text-4xl mb-2"></i><p class="text-[10px] font-black uppercase tracking-widest">Image Preview</p></div>`;
             }
         });
     });

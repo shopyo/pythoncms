@@ -1,63 +1,83 @@
 {% extends 'shopyo_dashboard/dashboard_base.html' %}
 
-{% block content %}
-<div class="container-xxl flex-grow-1 container-p-y">
-    <h4 class="fw-bold py-3 mb-4"><span class="text-muted fw-light">Content /</span> Create Type</h4>
+{% block title %}Create Content Type{% endblock %}
 
-    <div class="row">
-        <div class="col-xl">
-            <div class="card mb-4">
-                <div class="card-header d-flex justify-content-between align-items-center">
-                    <h5 class="mb-0">New Content Type</h5>
+{% block content %}
+<div class="max-w-4xl mx-auto space-y-8">
+    <!-- Header -->
+    <div class="border-b border-slate-100 dark:border-slate-800 pb-8">
+        <h1 class="text-3xl font-black text-slate-900 dark:text-white tracking-tight uppercase">New Content Type</h1>
+        <p class="text-slate-500 dark:text-slate-400 font-medium text-xs uppercase tracking-widest mt-1">Define a new structure for your content</p>
+    </div>
+
+    <!-- Form -->
+    <form method="POST" class="space-y-8">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+        
+        <!-- General Info -->
+        <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl p-8 shadow-sm space-y-6">
+            <div class="grid grid-cols-1 gap-6">
+                <div class="space-y-2">
+                    <label class="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em]" for="name">Type Name</label>
+                    <input type="text" id="name" name="name" placeholder="e.g. Blog Post" required 
+                           class="w-full bg-slate-50 dark:bg-slate-800/50 border border-slate-100 dark:border-slate-700/50 rounded-2xl py-4 px-6 text-sm focus:ring-4 focus:ring-primary/10 focus:border-primary transition-all outline-none font-bold text-slate-900 dark:text-white">
                 </div>
-                <div class="card-body">
-                    <form method="POST">
-                        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
-                        <div class="mb-3">
-                            <label class="form-label" for="name">Type Name</label>
-                            <input type="text" class="form-label form-control" id="name" name="name" placeholder="e.g. Blog Post" required />
-                        </div>
-                        <div class="mb-3">
-                            <label class="form-label" for="description">Description</label>
-                            <textarea id="description" name="description" class="form-control" placeholder="What is this content type for?"></textarea>
-                        </div>
-                        
-                        <hr>
-                        <h5>Fields</h5>
-                        <div id="fields-container">
-                            <div class="row mb-3 field-row">
-                                <div class="col-md-5">
-                                    <input type="text" name="field_name[]" class="form-control" placeholder="Field Name (e.g. title)" required>
-                                </div>
-                                <div class="col-md-5">
-                                    <select name="field_type[]" class="form-select">
-                                        <option value="text">🔤 Text (Short)</option>
-                                        <option value="richtext">📝 Rich Text (Editor)</option>
-                                        <option value="textarea">📄 Textarea (Long)</option>
-                                        <option value="image">🖼️ Image (URL)</option>
-                                        <option value="number">🔢 Number</option>
-                                        <option value="date">📅 Date</option>
-                                    </select>
-                                </div>
-                                <div class="col-md-2">
-                                    <button type="button" class="btn btn-danger remove-field"><i class="bx bx-trash"></i></button>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <button type="button" id="add-field" class="btn btn-outline-primary mb-3">
-                            <i class="bx bx-plus me-1"></i> Add Field
-                        </button>
-                        
-                        <div class="mt-4">
-                            <button type="submit" class="btn btn-primary">Create Content Type</button>
-                            <a href="{{ url_for('contenttype.dashboard') }}" class="btn btn-outline-secondary">Cancel</a>
-                        </div>
-                    </form>
+                <div class="space-y-2">
+                    <label class="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em]" for="description">Description</label>
+                    <textarea id="description" name="description" placeholder="What is this content type for?" rows="3"
+                              class="w-full bg-slate-50 dark:bg-slate-800/50 border border-slate-100 dark:border-slate-700/50 rounded-2xl py-4 px-6 text-sm focus:ring-4 focus:ring-primary/10 focus:border-primary transition-all outline-none text-slate-600 dark:text-slate-300"></textarea>
                 </div>
             </div>
         </div>
-    </div>
+
+        <!-- Fields Builder -->
+        <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl p-8 shadow-sm space-y-6">
+            <div class="flex items-center justify-between">
+                <h3 class="text-xs font-black text-slate-900 dark:text-white uppercase tracking-[0.2em]">Fields Configuration</h3>
+                <button type="button" id="add-field" class="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-slate-50 dark:bg-slate-800 text-[10px] font-black text-slate-500 uppercase tracking-widest hover:bg-primary/10 hover:text-primary transition-all border border-slate-100 dark:border-slate-700/50">
+                    <i class="fas fa-plus"></i>
+                    Add Field
+                </button>
+            </div>
+
+            <div id="fields-container" class="space-y-4">
+                <!-- Initial Row -->
+                <div class="flex flex-col md:flex-row gap-4 p-6 bg-slate-50/50 dark:bg-slate-800/30 rounded-2xl border border-slate-100 dark:border-slate-800/50 field-row group animate-in fade-in slide-in-from-top-2">
+                    <div class="flex-1 space-y-2">
+                        <label class="text-[9px] font-bold text-slate-400 uppercase tracking-widest">Field Name</label>
+                        <input type="text" name="field_name[]" placeholder="e.g. title" required
+                               class="w-full bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl py-3 px-4 text-xs focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none font-bold transition-all">
+                    </div>
+                    <div class="flex-1 space-y-2">
+                        <label class="text-[9px] font-bold text-slate-400 uppercase tracking-widest">Field Type</label>
+                        <select name="field_type[]" class="w-full bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl py-3 px-4 text-xs focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-all">
+                            <option value="text">Text (Short)</option>
+                            <option value="richtext">Rich Text (Editor)</option>
+                            <option value="textarea">Textarea (Long)</option>
+                            <option value="image">Image (URL)</option>
+                            <option value="number">Number</option>
+                            <option value="date">Date</option>
+                        </select>
+                    </div>
+                    <div class="flex items-end md:pb-1">
+                        <button type="button" class="remove-field p-3 rounded-xl bg-rose-50 dark:bg-rose-900/20 text-rose-600 hover:bg-rose-600 hover:text-white transition-all opacity-0 group-hover:opacity-100">
+                            <i class="fas fa-trash-alt text-xs"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Actions -->
+        <div class="flex items-center gap-4 pt-4">
+            <button type="submit" class="inline-flex items-center gap-2 px-8 py-4 rounded-2xl bg-primary text-white hover:bg-primary-dark shadow-2xl shadow-primary/20 transition-all text-xs font-black uppercase tracking-widest">
+                Create Content Type
+            </button>
+            <a href="{{ url_for('contenttype.dashboard') }}" class="px-8 py-4 rounded-2xl bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 text-xs font-black uppercase tracking-widest hover:bg-slate-200 dark:hover:bg-slate-700 transition-all">
+                Cancel
+            </a>
+        </div>
+    </form>
 </div>
 
 <script>
@@ -67,23 +87,28 @@ document.addEventListener('DOMContentLoaded', function() {
     
     addButton.addEventListener('click', function() {
         const row = document.createElement('div');
-        row.className = 'row mb-3 field-row';
+        row.className = 'flex flex-col md:flex-row gap-4 p-6 bg-slate-50/50 dark:bg-slate-800/30 rounded-2xl border border-slate-100 dark:border-slate-800/50 field-row group animate-in fade-in slide-in-from-top-2';
         row.innerHTML = `
-            <div class="col-md-5">
-                <input type="text" name="field_name[]" class="form-control" placeholder="Field Name" required>
+            <div class="flex-1 space-y-2">
+                <label class="text-[9px] font-bold text-slate-400 uppercase tracking-widest">Field Name</label>
+                <input type="text" name="field_name[]" placeholder="e.g. title" required
+                       class="w-full bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl py-3 px-4 text-xs focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none font-bold transition-all">
             </div>
-            <div class="col-md-5">
-                <select name="field_type[]" class="form-select">
-                    <option value="text">🔤 Text (Short)</option>
-                    <option value="richtext">📝 Rich Text (Editor)</option>
-                    <option value="textarea">📄 Textarea (Long)</option>
-                    <option value="image">🖼️ Image (URL)</option>
-                    <option value="number">🔢 Number</option>
-                    <option value="date">📅 Date</option>
+            <div class="flex-1 space-y-2">
+                <label class="text-[9px] font-bold text-slate-400 uppercase tracking-widest">Field Type</label>
+                <select name="field_type[]" class="w-full bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl py-3 px-4 text-xs focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-all">
+                    <option value="text">Text (Short)</option>
+                    <option value="richtext">Rich Text (Editor)</option>
+                    <option value="textarea">Textarea (Long)</option>
+                    <option value="image">Image (URL)</option>
+                    <option value="number">Number</option>
+                    <option value="date">Date</option>
                 </select>
             </div>
-            <div class="col-md-2">
-                <button type="button" class="btn btn-danger remove-field"><i class="bx bx-trash"></i></button>
+            <div class="flex items-end md:pb-1">
+                <button type="button" class="remove-field p-3 rounded-xl bg-rose-50 dark:bg-rose-900/20 text-rose-600 hover:bg-rose-600 hover:text-white transition-all opacity-0 group-hover:opacity-100">
+                    <i class="fas fa-trash-alt text-xs"></i>
+                </button>
             </div>
         `;
         container.appendChild(row);
