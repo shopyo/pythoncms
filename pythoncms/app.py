@@ -350,6 +350,21 @@ def inject_global_vars(app, global_template_variables):
                         pass
             return modules_info
 
+        def get_content(type_name, limit=None, order='desc'):
+            from modules.contenttype.models import ContentType, ContentItem
+            ct = ContentType.query.filter_by(name=type_name).first()
+            if not ct:
+                return []
+            query = ContentItem.query.filter_by(content_type_id=ct.id)
+            if order == 'desc':
+                query = query.order_by(ContentItem.created_at.desc())
+            else:
+                query = query.order_by(ContentItem.created_at.asc())
+            
+            if limit:
+                return query.limit(limit).all()
+            return query.all()
+
         base_context = {
             "APP_NAME": APP_NAME,
             "OUR_APP_NAME": APP_NAME,
@@ -362,7 +377,8 @@ def inject_global_vars(app, global_template_variables):
             "get_active_front_theme": get_active_front_theme,
             "get_active_back_theme": get_active_back_theme,
             "get_modules_info": get_modules_info,
-            "get_url_prefix": get_url_prefix
+            "get_url_prefix": get_url_prefix,
+            "get_content": get_content
         }
         base_context.update(global_template_variables)
 
