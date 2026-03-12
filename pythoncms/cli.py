@@ -119,14 +119,16 @@ def seed():
 
 @cli.command("run")
 @click.option("--debug", is_flag=True, default=True)
-def run(debug):
+@click.option("--port", default=5000, help="Port to run the server on")
+@click.option("--host", default="127.0.0.1", help="Host to bind to")
+def run(debug, port, host):
     """Run the development server"""
     bin_dir = os.path.dirname(sys.executable)
     flask_cmd = os.path.join(bin_dir, "flask")
     args = [flask_cmd]
     if debug:
         args.append("--debug")
-    args.append("run")
+    args.extend(["run", "--port", str(port), "--host", host])
     subprocess.run(args, check=True)
 
 
